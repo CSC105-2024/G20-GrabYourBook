@@ -2,13 +2,42 @@ import React, { useState, useEffect } from "react";
 import { z } from "zod";
 import errorIcons from "../icons/errorIcons.svg";
 import successfullyIcon from "../icons/successfullyIcons.svg";
+<<<<<<< HEAD
+import { Link, useNavigate } from "react-router-dom";
+=======
 import { Link } from "react-router-dom";
+>>>>>>> b8ad84c (add-login)
 
 const userSchema = z.object({
   username: z.string().min(1, "Username is required"),
   password: z.string().min(1, "Password is required"),
 });
 
+<<<<<<< HEAD
+const correctUsername = "user12345";
+const correctPassword = "password123";
+
+const Login = () => {
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+  });
+
+  const [errors, setErrors] = useState({
+    username: "",
+    password: "",
+  });
+
+  const [loginStatus, setLoginStatus] = useState("");
+  const [touched, setTouched] = useState({
+    username: false,
+    password: false,
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+=======
 const correctUsername = "user123";
 const correctPassword = "password123";
 
@@ -81,12 +110,23 @@ const Login = () => {
         [name]: "",
       }));
     }
+>>>>>>> b8ad84c (add-login)
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+<<<<<<< HEAD
+    const result = userSchema.safeParse(formData);
+
+    if (!formData.username.trim() && !formData.password.trim()) {
+      setLoginStatus("empty");
+      triggerShake();
+      return;
+    }
+=======
 
     const result = userSchema.safeParse(formData);
+>>>>>>> b8ad84c (add-login)
 
     if (result.success) {
       if (
@@ -96,6 +136,10 @@ const Login = () => {
         setLoginStatus("success");
       } else {
         setLoginStatus("error");
+<<<<<<< HEAD
+        triggerShake();
+=======
+>>>>>>> b8ad84c (add-login)
       }
     } else {
       const newErrors = {};
@@ -108,6 +152,104 @@ const Login = () => {
   };
 
   return (
+<<<<<<< HEAD
+    <div className="w-full h-screen bg-neutral-200 overflow-hidden relative flex justify-center items-center">
+      <div className="absolute w-[3000px] h-[1500px] bg-indigo-300 rounded-full blur-[150px] left-[60%] top-[-30%]" />
+      <div className="absolute w-[1000px] h-[600px] bg-blue-500 rounded-full blur-[250px] left-[65%] top-[10%]" />
+      <div className="z-10 flex flex-col items-center w-full max-w-md px-4">
+        {loginStatus && (
+          <div
+            className={`w-full mb-4 transition-opacity duration-500 ease-in-out ${
+              loginStatus === "success"
+                ? "animate-fadeInScale"
+                : shakeTrigger
+                ? "animate-shake"
+                : ""
+            }`}
+          >
+            <div className="w-full flex items-center justify-center gap-2 text-center py-2 px-4 rounded-xl text-black bg-white font-bold shadow-md">
+              <img
+                src={
+                  loginStatus === "success"
+                    ? successfullyIcon
+                    : errorIcons
+                }
+                alt="status icon"
+                className="w-6 h-6 md:w-8 md:h-8"
+              />
+              <span className="text-sm md:text-base">
+                {loginStatus === "success"
+                  ? "Log In Successful"
+                  : loginStatus === "error"
+                  ? "Username or Password are not correct"
+                  : loginStatus === "empty"
+                  ? "Please fill the username and password"
+                  : ""}
+              </span>
+            </div>
+          </div>
+        )}
+
+
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 w-[90%] max-w-md p-6 bg-white rounded-3xl shadow-lg">
+        <div className="text-start mb-6">
+          <div className="text-black text-4xl font-bold font-['Poppins']">
+            Log In
+          </div>
+        </div>
+
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label className="block text-xl text-black font-normal font-['Poppins']">
+              Username
+            </label>
+            <input
+              type="text"
+              name="username"
+              placeholder="Enter username"
+              value={formData.username}
+              onChange={handleInputChange}
+              onBlur={handleBlur}
+              className="w-full h-14 p-4 bg-zinc-100 rounded-2xl outline-none"
+            />
+            {errors.username && touched.username && (
+              <div className="text-red-500 text-sm mt-1">{errors.username}</div>
+            )}
+          </div>
+
+          <div className="mb-6">
+            <label className="block text-xl text-black font-normal font-['Poppins']">
+              Password
+            </label>
+            <input
+              type="password"
+              name="password"
+              placeholder="Enter password"
+              value={formData.password}
+              onChange={handleInputChange}
+              onBlur={handleBlur}
+              className="w-full h-14 p-4 bg-zinc-100 rounded-2xl outline-none"
+            />
+            {errors.password && touched.password && (
+              <div className="text-red-500 text-sm mt-1">{errors.password}</div>
+            )}
+          </div>
+
+          <button
+            type="submit"
+            className="w-full py-4 bg-blue-950 hover:bg-blue-800 text-white text-2xl rounded-2xl"
+          >
+            Log In
+          </button>
+        </form>
+
+          <div className="mt-4 text-center">
+            <span className="text-black text-lg">Not a member? </span>
+            <Link to="/register" className="text-blue-500 text-lg underline">
+              Register Now
+            </Link>
+          </div>
+=======
     <div className="w-full h-screen bg-neutral-200 overflow-hidden relative">
       <div className="w-[3000px] h-[1500px] left-[60%] top-[-30%] absolute bg-indigo-300 rounded-full blur-[150px]" />
       <div className="w-[1000px] h-[600px] left-[65%] top-[10%] absolute bg-blue-500 rounded-full blur-[250px]" />
@@ -202,11 +344,10 @@ const Login = () => {
           <Link to="/register" className="text-blue-500 text-lg underline">
             Register Now
           </Link>
+>>>>>>> b8ad84c (add-login)
         </div>
       </div>
     </div>
-  );
-};
   );
 };
 
