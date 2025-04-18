@@ -13,6 +13,7 @@ import Fantasy from './pages/Fantasy.jsx'
 import Horror from './pages/Horror.jsx'
 import Romance from './pages/Romance.jsx'
 import Lgbtq from './pages/Lgbtq.jsx'
+import Booking from './pages/Booking.jsx'
 
 const router = createBrowserRouter([
   {
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
     path: "/lgbtq",
     element: <Lgbtq/>,
   },
+  {
+    path: "/booking",
+    element: <Booking/>,
+  }
 
  
 ])
