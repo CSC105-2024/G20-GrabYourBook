@@ -4,6 +4,7 @@ import harryImg from "../images/harry.jpg";
 import hobbitImg from "../images/hobbit.jpg";
 import Percy from "../images/Percy.jpg";
 import Sherlock from "../images/sherlock.jpg";
+import confirmErrorIcon from "../icons/bookingError.svg";
 
 const books = [
   {
@@ -43,6 +44,7 @@ const ConfirmBooking = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const today = new Date().toISOString().split("T")[0];
+  const [bookingError, setBookingError] = useState("");
 
   useEffect(() => {
     const foundBook = books.find((b) => b.id === id);
@@ -60,12 +62,13 @@ const ConfirmBooking = () => {
   };
 
   const handleBooking = () => {
-    if (startDate) {
-      navigate(`/booking-success/${id}`);
-    } else {
-      alert("Please select a start date first.");
-      return
+    if (!startDate) {
+      setBookingError("Please select a start date before booking.");
+      return;
     }
+
+    setBookingError("");
+    navigate(`/booking-success/${id}`);
   };
 
   if (!book) {
@@ -85,57 +88,70 @@ const ConfirmBooking = () => {
       <div className="w-[1000px] h-[600px] left-[65%] top-[10%] absolute bg-blue-500 rounded-full blur-[250px]" />
       <div className="w-[1500px] h-[700px] right-[70%] top-[-30%] absolute bg-indigo-200 rounded-full blur-[150px]" />
 
-      <div className="z-20 w-full max-w-[800px] md:bg-white md:rounded-2xl md:shadow-xl p-6 flex flex-col items-center gap-10 md:w-[600px] md:h-[450px]">
-        <h2 className="text-2xl font-bold text-center w-full mt-3 font-['Poppins']">
-          Confirm Booking
-        </h2>
-
-        <div className="flex flex-col md:flex-row items-center gap-6 md:gap-10 w-full justify-center">
-          <div className="flex flex-col items-center w-full md:w-auto">
+      <div className=" flex flex-col justify-center">
+        {bookingError && (
+          <div className="max-w-[800px] md:rounded-2xl md:shadow-xl p-3 flex flex-row text-xs md:flex-row  justify-center gap-1 md:gap-5 items-center md:w-[600px] mb-4 w-full bg-white md:bg-white text-black md:text-lg text-bold rounded-xl text-center font-semibold z-30 font-['Poppins']">
             <img
-              src={book.image}
-              alt={book.title}
-              className="w-40 h-60 rounded-lg shadow-md object-cover font-['Poppins']"
+              src={confirmErrorIcon}
+              alt="error icon"
+              className="w-5 h-5 md:w-10 md:h-10 mb-2 mt-1"
             />
-            <p className="mt-4 text-blue-900 font-bold text-lg text-center font-['Poppins']">
-              {cutTitle(book.title)}
-            </p>
+            <span>{bookingError}</span>
           </div>
+        )}
 
-          <form className="flex flex-col gap-7 items-center w-full md:items-start md:w-auto">
-            <div className="w-full max-w-[220px]">
-              <label className="block text-gray-700 font-medium mb-2 text-sm font-['Poppins']">
-                Start Date:
-              </label>
-              <input
-                type="date"
-                value={startDate}
-                onChange={handleStartDateChange}
-                min={today}
-                className="w-full rounded-xl border border-gray-400 px-4 py-2 bg-gray-100 text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-400 font-['Poppins']"
+        <div className="z-20 w-full max-w-[800px] md:bg-white md:rounded-2xl md:shadow-xl p-6 flex flex-col items-center gap-10 md:w-[600px] md:h-[450px]">
+          <h2 className="text-2xl font-bold text-center w-full mt-3 font-['Poppins']">
+            Confirm Booking
+          </h2>
+
+          <div className="flex flex-col md:flex-row items-center gap-6 md:gap-10 w-full justify-center">
+            <div className="flex flex-col items-center w-full md:w-auto">
+              <img
+                src={book.image}
+                alt={book.title}
+                className="w-40 h-60 rounded-lg shadow-md object-cover font-['Poppins']"
               />
+              <p className="mt-4 text-blue-900 font-bold text-lg text-center font-['Poppins']">
+                {cutTitle(book.title)}
+              </p>
             </div>
 
-            <div className="w-full max-w-[220px]">
-              <label className="block text-gray-700 font-medium mb-2 text-sm font-['Poppins']">
-                End Date:
-              </label>
-              <input
-                type="date"
-                value={endDate}
-                readOnly
-                className="w-full rounded-xl border border-gray-400 px-4 py-2 bg-gray-100 text-gray-500 cursor-not-allowed font-['Poppins']"
-              />
-            </div>
+            <form className="flex flex-col gap-7 items-center w-full md:items-start md:w-auto">
+              <div className="w-full max-w-[220px]">
+                <label className="block text-gray-700 font-medium mb-2 text-sm font-['Poppins']">
+                  Start Date:
+                </label>
+                <input
+                  type="date"
+                  value={startDate}
+                  onChange={handleStartDateChange}
+                  min={today}
+                  className="w-full rounded-xl border border-gray-400 px-4 py-2 bg-gray-100 text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-400 font-['Poppins']"
+                />
+              </div>
 
-            <button
-              type="button"
-              onClick={handleBooking}
-              className="self-center mt-2 px-6 py-2 bg-blue-800 text-white font-bold rounded-xl hover:bg-blue-700 transition w-[100px] max-w-[220px] font-['Poppins']"
-            >
-              Book
-            </button>
-          </form>
+              <div className="w-full max-w-[220px]">
+                <label className="block text-gray-700 font-medium mb-2 text-sm font-['Poppins']">
+                  End Date:
+                </label>
+                <input
+                  type="date"
+                  value={endDate}
+                  readOnly
+                  className="w-full rounded-xl border border-gray-400 px-4 py-2 bg-gray-100 text-gray-500 cursor-not-allowed font-['Poppins']"
+                />
+              </div>
+
+              <button
+                type="button"
+                onClick={handleBooking}
+                className="self-center mt-2 px-6 py-2 bg-blue-800 text-white font-bold rounded-xl hover:bg-blue-700 transition w-[100px] max-w-[220px] font-['Poppins']"
+              >
+                Book
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     </div>
