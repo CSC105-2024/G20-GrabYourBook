@@ -1,17 +1,16 @@
-import "../App.css";
 import React, { useState, useRef } from "react";
 import { Link } from "react-router-dom";
-import Fantasy from "../images/fantasy.jpg";
-import Comedy from "../images/comedy.jpg";
-import Romance from "../images/romance.jpg";
-import Lgbtq from "../images/lgbtq.jpg";
-import Drama from "../images/drama.jpg";
-import Horror from "../images/horror.jpg";
+import Fantasy from "../../images/fantasy.jpg";
+import Comedy from "../../images/comedy.jpg";
+import Romance from "../../images/romance.jpg";
+import Lgbtq from "../../images/lgbtq.jpg";
+import Drama from "../../images/drama.jpg";
+import Horror from "../../images/horror.jpg";
 
 function Category() {
   return (
-    <div className="w-full flex item-center justify-center">
-      <div className="w-85 sm:w-320 sm:h-210 rounded-lg bg-white flex flex-col justify-center sm:items-center my-5 shadow-lg">
+    <div className="w-full flex item-center justify-center px-4">
+      <div className="w-full h-full max-w-320 rounded-lg bg-white flex flex-col justify-center sm:items-center shadow-lg p-5 m-5">
         <div className="w-full justify-center sm:text-left items-center">
           
           <h2 className="text-xl sm:text-2xl sm:text-left text-center font-bold sm:pl-20 mt-5 mb-4">
