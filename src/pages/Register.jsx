@@ -17,6 +17,7 @@ const registerSchema = z
 
 const Register = () => {
   const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -25,17 +26,25 @@ const Register = () => {
 
   const [errors, setErrors] = useState({});
   const [registerStatus, setRegisterStatus] = useState("");
-  const [touched, setTouched] = useState({
-    username: false,
-    password: false,
-    confirmPassword: false,
-  });
+  const [shakeTrigger, setShakeTrigger] = useState(false);
+
+  const triggerShake = () => {
+    setShakeTrigger(false);
+    requestAnimationFrame(() => setShakeTrigger(true));
+  };
 
   useEffect(() => {
     if (registerStatus === "success") {
       const timer = setTimeout(() => {
         navigate("/login");
-      }, 1000);
+      }, 1200);
+      return () => clearTimeout(timer);
+    }
+
+    if (registerStatus === "error" || registerStatus === "empty") {
+      const timer = setTimeout(() => {
+        setRegisterStatus("");
+      }, 3000);
       return () => clearTimeout(timer);
     }
   }, [registerStatus, navigate]);
@@ -43,28 +52,6 @@ const Register = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-
-    if (touched[name]) {
-      const result = registerSchema.safeParse({
-        ...formData,
-        [name]: value,
-      });
-
-      if (!result.success) {
-        const fieldError = result.error.errors.find(
-          (error) => error.path[0] === name
-        );
-        setErrors((prev) => ({
-          ...prev,
-          [name]: fieldError ? fieldError.message : "",
-        }));
-      } else {
-        setErrors((prev) => ({
-          ...prev,
-          [name]: "",
-        }));
-      }
-    }
   };
 
   const handleSubmit = (e) => {
@@ -77,6 +64,7 @@ const Register = () => {
     if (isUsernameEmpty && isPasswordEmpty && isConfirmPasswordEmpty) {
       setRegisterStatus("empty");
       setErrors({});
+      triggerShake();
       return;
     }
 
@@ -89,7 +77,8 @@ const Register = () => {
 
     if (Object.keys(fieldErrors).length > 0) {
       setErrors(fieldErrors);
-      setRegisterStatus("");
+      setRegisterStatus("error");
+      triggerShake();
       return;
     }
 
@@ -105,51 +94,43 @@ const Register = () => {
       });
       setErrors(newErrors);
       setRegisterStatus("error");
+      triggerShake();
     }
   };
 
   return (
     <div className="w-full h-screen bg-neutral-200 overflow-hidden relative flex justify-center items-center">
-      <div className="w-[3000px] h-[1500px] left-[60%] top-[-30%] absolute bg-indigo-300 rounded-full blur-[150px]" />
-      <div className="w-[1000px] h-[600px] left-[65%] top-[10%] absolute bg-blue-500 rounded-full blur-[250px]" />
+      <div className="absolute w-[3000px] h-[1500px] bg-indigo-300 rounded-full blur-[150px] left-[60%] top-[-30%]" />
+      <div className="absolute w-[1000px] h-[600px] bg-blue-500 rounded-full blur-[250px] left-[65%] top-[10%]" />
 
       <div className="z-10 flex flex-col items-center w-full max-w-md px-4">
         {registerStatus && (
-          <div className="w-full mb-4 animate-fade-in-scale transition-all">
+          <div
+            className={`w-full mb-4 transition-all ${
+              registerStatus === "success"
+                ? "animate-fadeInScale"
+                : shakeTrigger
+                ? "animate-shake"
+                : ""
+            }`}
+          >
             <div className="w-full flex items-center justify-center gap-2 text-center py-2 px-4 rounded-xl text-black bg-white font-bold shadow-md">
-              {registerStatus === "error" && (
-                <img
-                  src={errorIcons}
-                  alt="Error icon"
-                  className="w-6 h-6 md:w-8 md:h-8"
-                />
-              )}
-              {registerStatus === "success" && (
-                <img
-                  src={successfullyIcon}
-                  alt="Success icon"
-                  className="w-5 h-5 md:w-6 md:h-6"
-                />
-              )}
-              {registerStatus === "empty" && (
-                <img
-                  src={errorIcons}
-                  alt="Error icon"
-                  className="w-5 h-5 md:w-6 md:h-6"
-                />
-              )}
-
+              <img
+                src={
+                  registerStatus === "success" ? successfullyIcon : errorIcons
+                }
+                alt="status icon"
+                className="w-6 h-6"
+              />
               <span className="text-sm md:text-base">
                 {registerStatus === "success"
                   ? "Registration Successful"
                   : registerStatus === "empty"
                   ? "Please fill your username and password"
-                  : registerStatus === "error"
-                  ? errors.confirmPassword ||
+                  : errors.confirmPassword ||
                     errors.username ||
                     errors.password ||
-                    "Please correct the errors in the form"
-                  : ""}
+                    "Please correct the errors in the form"}
               </span>
             </div>
           </div>
