@@ -13,52 +13,55 @@ import Fantasy from './pages/Fantasy.jsx'
 import Horror from './pages/Horror.jsx'
 import Romance from './pages/Romance.jsx'
 import Lgbtq from './pages/Lgbtq.jsx'
+import DetailNotava from './pages/DetailBookNotava.jsx'
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <HomePage/>,
+    element: <HomePage />,
   },
   {
     path: "/login",
-    element: <Login/>,
+    element: <Login />,
   },
   {
     path: "/register",
-    element: <Register/>,
+    element: <Register />,
   },
   {
     path: "/mybook",
-    element: <Mybook/>,
+    element: <Mybook />,
   },
   {
     path: "/comedy",
-    element: <Comedy/>,
+    element: <Comedy />,
   },
-  
+
   {
     path: "/drama",
-    element: <Drama/>,
+    element: <Drama />,
   },
   {
     path: "/fantasy",
-    element: <Fantasy/>
+    element: <Fantasy />,
   },
   {
     path: "/horror",
-    element: <Horror/>,
+    element: <Horror />,
   },
   {
     path: "/romance",
-    element: <Romance/>,
+    element: <Romance />,
   },
   {
     path: "/lgbtq",
-    element: <Lgbtq/>,
+    element: <Lgbtq />,
   },
-
- 
-])
+  {
+    path: "/detailnotava",
+    element: <DetailNotava/>
+  },
+]);
 
 
 createRoot(document.getElementById('root')).render(
