@@ -81,8 +81,7 @@ const ConfirmBooking = () => {
 
   return (
     <div
-      className="w-full bg-neutral-200 overflow-hidden relative flex justify-center items-center px-4"
-      style={{ minHeight: "calc(100vh - 64px)" }}
+      className="w-full min-h-[calc(100vh-64px)] bg-neutral-200 overflow-hidden relative flex justify-center items-center px-4"
     >
       <div className="w-[2000px] h-[1000px] left-[60%] top-[-30%] absolute bg-indigo-300 rounded-full blur-[150px]" />
       <div className="w-[1000px] h-[600px] left-[65%] top-[10%] absolute bg-blue-500 rounded-full blur-[250px]" />
