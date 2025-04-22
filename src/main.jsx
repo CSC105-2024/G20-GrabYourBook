@@ -1,7 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import App from './App.jsx'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import HomePage from './pages/HomePage.jsx'
 import Login from './pages/Login.jsx'
@@ -14,6 +13,7 @@ import Horror from './pages/Horror.jsx'
 import Romance from './pages/Romance.jsx'
 import Lgbtq from './pages/Lgbtq.jsx'
 import Booking from './pages/Booking.jsx'
+import BookingSuccessPage from './components/confirmBookingPopup.jsx'
 
 const router = createBrowserRouter([
   {
@@ -58,8 +58,12 @@ const router = createBrowserRouter([
     element: <Lgbtq/>,
   },
   {
-    path: "/booking",
+    path: "/booking/:id",
     element: <Booking/>,
+  },
+  {
+    path: "/booking-success/:id",
+    element: <BookingSuccessPage/>
   }
 
  
