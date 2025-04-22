@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> c12156b (feat: push ava book)
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
@@ -17,9 +13,7 @@ import Fantasy from './pages/Fantasy.jsx'
 import Horror from './pages/Horror.jsx'
 import Romance from './pages/Romance.jsx'
 import Lgbtq from './pages/Lgbtq.jsx'
-<<<<<<< HEAD
-import DetailAva from './pages/DetailBookava.jsx'
-=======
+import DetailNotava from './pages/DetailBookNotava.jsx'
 import { StrictMode, useState, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
