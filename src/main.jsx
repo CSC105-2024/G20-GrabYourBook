@@ -42,49 +42,6 @@ import React from "react";
 
 const router = createBrowserRouter([
   {
-        path: "/",
-        element: <HomePage/>,
-      },
-      {
-        path: "/login",
-        element: <Login/>,
-      },
-      {
-        path: "/register",
-        element: <Register/>,
-      },
-      {
-        path: "/mybook",
-        element: <Mybook/>,
-      },
-      {
-        path: "/comedy",
-        element: <Comedy/>,
-      },
-    
-      {
-        path: "/drama",
-        element: <Drama/>,
-      },
-      {
-        path: "/fantasy",
-        element: <Fantasy/>
-      },
-      {
-        path: "/horror",
-        element: <Horror/>,
-      },
-      {
-        path: "/romance",
-        element: <Romance/>,
-      },
-      {
-        path: "/lgbtq",
-        element: <Lgbtq/>,
-      },
-    
-]);
-
     path: "/",
     element: <HomePage/>,
   },
@@ -149,17 +106,6 @@ function RootWithContext() {
 >>>>>>> c64410c (commit home category  final)
 =======
 >>>>>>> c12156b (feat: push ava book)
-
-  useEffect(() => {
-    localStorage.setItem("isLogin", isLogin);
-  }, [isLogin]);
-
-  return (
-    <LoginContext.Provider value={{ isLogin, setIsLogin }}>
-      <RouterProvider router={router} />
-    </LoginContext.Provider>
-  );
-}
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
