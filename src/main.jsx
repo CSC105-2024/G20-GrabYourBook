@@ -30,9 +30,7 @@ import Romance from "./pages/Romance.jsx";
 import Lgbtq from "./pages/Lgbtq.jsx";
 import LoginContext from "./context/LoginContext";
 import React from "react";
->>>>>>> c64410c (commit home category  final)
-=======
->>>>>>> c12156b (feat: push ava book)
+import DetailAva from './pages/DetailBookava.jsx';
 
 const router = createBrowserRouter([
   {
@@ -81,25 +79,13 @@ const router = createBrowserRouter([
     element:<DetailAva/>,
   },
 ])
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-  {
-    path: "/detailava",
-    element:<DetailAva/>,
-  },
-
  
-])
-=======
 function RootWithContext() {
   const [isLogin, setIsLogin] = useState(() => {
     const saved = localStorage.getItem("isLogin");
     return saved === "true";
   });
->>>>>>> c64410c (commit home category  final)
-=======
->>>>>>> c12156b (feat: push ava book)
+}
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
