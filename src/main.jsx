@@ -18,44 +18,44 @@ import BookingSuccessPage from './components/confirmBookingPopup.jsx'
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <HomePage/>,
+    element: <HomePage />,
   },
   {
     path: "/login",
-    element: <Login/>,
+    element: <Login />,
   },
   {
     path: "/register",
-    element: <Register/>,
+    element: <Register />,
   },
   {
     path: "/mybook",
-    element: <Mybook/>,
+    element: <Mybook />,
   },
   {
     path: "/comedy",
-    element: <Comedy/>,
+    element: <Comedy />,
   },
-  
+
   {
     path: "/drama",
-    element: <Drama/>,
+    element: <Drama />,
   },
   {
     path: "/fantasy",
-    element: <Fantasy/>
+    element: <Fantasy />,
   },
   {
     path: "/horror",
-    element: <Horror/>,
+    element: <Horror />,
   },
   {
     path: "/romance",
-    element: <Romance/>,
+    element: <Romance />,
   },
   {
     path: "/lgbtq",
-    element: <Lgbtq/>,
+    element: <Lgbtq />,
   },
   {
     path: "/booking/:id",
@@ -72,6 +72,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router}/>
-  </StrictMode>,
-)
+      <RouterProvider router={router}>
+      <RootWithContext/>
+      </RouterProvider>
+  </StrictMode>
+);
