@@ -14,6 +14,7 @@ import Romance from './pages/Romance.jsx'
 import Lgbtq from './pages/Lgbtq.jsx'
 import Booking from './pages/Booking.jsx'
 import BookingSuccessPage from './components/confirmBookingPopup.jsx'
+import DetailAva from './pages/DetailBookava.jsx'
 
 const router = createBrowserRouter([
   {
@@ -64,13 +65,21 @@ const router = createBrowserRouter([
   {
     path: "/booking-success/:id",
     element: <BookingSuccessPage/>
-  }
-
- 
+  },
+  {
+    path: "/detailava",
+    element: <DetailAva />,
+  },
 ])
 
+function RootWithContext() {
+  const [isLogin, setIsLogin] = useState(() => {
+    const saved = localStorage.getItem("isLogin");
+    return saved === "true";
+  });
+}
 
-createRoot(document.getElementById('root')).render(
+createRoot(document.getElementById("root")).render(
   <StrictMode>
       <RouterProvider router={router}>
       <RootWithContext/>
