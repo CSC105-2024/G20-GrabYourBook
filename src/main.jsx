@@ -1,23 +1,3 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.jsx'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import HomePage from './pages/HomePage.jsx'
-import Login from './pages/Login.jsx'
-import Mybook from './pages/Mybook.jsx'
-import Comedy from './pages/Comedy.jsx'
-import Register from './pages/Register.jsx'
-import Drama from './pages/Drama.jsx'
-import Fantasy from './pages/Fantasy.jsx'
-import Horror from './pages/Horror.jsx'
-import Romance from './pages/Romance.jsx'
-import Lgbtq from './pages/Lgbtq.jsx'
-import DetailNotava from './pages/DetailBookNotava.jsx'
-import { StrictMode, useState, useEffect } from "react";
-import { createRoot } from "react-dom/client";
-import "./index.css";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import HomePage from "./pages/HomePage.jsx";
 import Login from "./pages/Login.jsx";
 import Mybook from "./pages/Mybook.jsx";
@@ -28,58 +8,60 @@ import Fantasy from "./pages/Fantasy.jsx";
 import Horror from "./pages/Horror.jsx";
 import Romance from "./pages/Romance.jsx";
 import Lgbtq from "./pages/Lgbtq.jsx";
-import LoginContext from "./context/LoginContext";
-import React from "react";
-import DetailAva from './pages/DetailBookava.jsx';
+import { StrictMode, useState, useEffect } from "react";
+import { createRoot } from "react-dom/client";
+import "./index.css";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import DetailAva from "./pages/DetailBookava.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <HomePage/>,
+    element: <HomePage />,
   },
   {
     path: "/login",
-    element: <Login/>,
+    element: <Login />,
   },
   {
     path: "/register",
-    element: <Register/>,
+    element: <Register />,
   },
   {
     path: "/mybook",
-    element: <Mybook/>,
+    element: <Mybook />,
   },
   {
     path: "/comedy",
-    element: <Comedy/>,
+    element: <Comedy />,
   },
-  
+
   {
     path: "/drama",
-    element: <Drama/>,
+    element: <Drama />,
   },
   {
     path: "/fantasy",
-    element: <Fantasy/>
+    element: <Fantasy />,
   },
   {
     path: "/horror",
-    element: <Horror/>,
+    element: <Horror />,
   },
   {
     path: "/romance",
-    element: <Romance/>,
+    element: <Romance />,
   },
   {
     path: "/lgbtq",
-    element: <Lgbtq/>,
+    element: <Lgbtq />,
   },
- {
+  {
     path: "/detailava",
-    element:<DetailAva/>,
+    element: <DetailAva />,
   },
-])
- 
+]);
+
 function RootWithContext() {
   const [isLogin, setIsLogin] = useState(() => {
     const saved = localStorage.getItem("isLogin");
@@ -87,8 +69,10 @@ function RootWithContext() {
   });
 }
 
-createRoot(document.getElementById('root')).render(
+createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <RootWithContext />
+      <RouterProvider router={router}>
+      <RootWithContext/>
+      </RouterProvider>
   </StrictMode>
 );
