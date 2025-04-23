@@ -1,26 +1,43 @@
-import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
-import { GoChevronDown, GoChevronUp } from "react-icons/go";
-import { GoPersonFill } from "react-icons/go";
+import React, { useState, useContext } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { GoChevronDown, GoChevronUp, GoPersonFill } from "react-icons/go";
 import { HiMenuAlt3 } from "react-icons/hi";
+import Logo from "../images/logo.jpg";
+import LoginContext from "../context/LoginContext";
 
 function Navbar() {
   const [dropdownCategoryOpen, setDropdownCategoryOpen] = useState(false);
   const [dropdownProfileOpen, setDropdownProfileOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { isLogin, setIsLogin } = useContext(LoginContext);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    setIsLogin(false);
+    navigate("/");
+  };
 
   return (
-    <nav className="flex justify-between p-5 w-full h-16 items-center shadow-md bg-gray-50">
+    <nav className="flex justify-between p-5 w-full h-16 items-center shadow-md bg-gray-50 z-[9999] relative">
       <button
         className="lg:hidden flex items-center text-2xl"
         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
       >
         <HiMenuAlt3 />
       </button>
-      <p className="text-xl font-bold text-[#092737]">Grab Your Book</p>
+      <div className="flex flex-row items-center">
+        <img
+          src={Logo}
+          alt="logo"
+          className="h-6 sm:h-7 rounded mr-2 justify-center"
+        />
+        <p className="sm:text-xl text-lg font-bold text-[#092737] font-['Libre_Caslon_Text']">
+          Grab Your Book
+        </p>
+      </div>
 
       {/* Desktop */}
-      <div className="hidden lg:flex gap-80 justify-between items-center">
+      <div className="hidden lg:flex w-4/6 justify-between items-center">
         <NavLink
           to="/"
           className={({ isActive }) =>
@@ -29,8 +46,9 @@ function Navbar() {
         >
           Home
         </NavLink>
+
         {/* Category */}
-        <div className="relative">
+        <div className="relative z-[9999]">
           <button
             onClick={() => setDropdownCategoryOpen(!dropdownCategoryOpen)}
             className="flex items-center gap-1 hover:text-[#B1ACE4] focus:outline-none"
@@ -40,7 +58,7 @@ function Navbar() {
           </button>
 
           {dropdownCategoryOpen && (
-            <div className="absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-lg overflow-hidden">
+            <div className="absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-lg overflow-hidden z-[9999]">
               <NavLink
                 to="/comedy"
                 className="block px-4 py-2 text-gray-700 hover:bg-[#95B9FF] hover:text-white transition"
@@ -81,7 +99,6 @@ function Navbar() {
           )}
         </div>
 
-        {/* My Book */}
         <NavLink
           to="/mybook"
           className={({ isActive }) =>
@@ -93,7 +110,7 @@ function Navbar() {
       </div>
 
       {/* Profile */}
-      <div className="relative">
+      <div className="relative z-[9999]">
         <button
           onClick={() => setDropdownProfileOpen(!dropdownProfileOpen)}
           className="flex items-center justify-center w-10 h-10 rounded-full border-2 border-gray-300 hover:text-[#B1ACE4] focus:outline-none"
@@ -102,20 +119,37 @@ function Navbar() {
         </button>
 
         {dropdownProfileOpen && (
-          <div className="absolute mt-2 w-48 right-0 bg-white shadow-lg rounded-lg overflow-hidden">
-            <NavLink
-              to="/"
-              className="block px-4 py-2 text-gray-700 hover:bg-[#95B9FF] hover:text-white transition"
-            >
-              Log Out
-            </NavLink>
+          <div className="absolute mt-2 w-48 right-0 bg-white shadow-lg rounded-lg overflow-hidden z-[9999]">
+            {isLogin ? (
+              <NavLink
+                onClick={handleLogout}
+                className="block px-4 py-2 text-gray-700 hover:bg-[#95B9FF] hover:text-white transition"
+              >
+                Log Out
+              </NavLink>
+            ) : (
+              <>
+                <NavLink
+                  to="/login"
+                  className="block px-4 py-2 text-gray-700 hover:bg-[#95B9FF] hover:text-white transition"
+                >
+                  Log In
+                </NavLink>
+                <NavLink
+                  to="/register"
+                  className="block px-4 py-2 text-gray-700 hover:bg-[#95B9FF] hover:text-white transition"
+                >
+                  Register
+                </NavLink>
+              </>
+            )}
           </div>
         )}
       </div>
 
       {/* Mobile */}
       {mobileMenuOpen && (
-        <div className="lg:hidden w-full bg-gray-50 absolute top-16 left-0 right-0 shadow-md z-10">
+        <div className="lg:hidden w-full bg-gray-50 absolute top-16 left-0 right-0 shadow-md z-[9999]">
           <div className="flex flex-col items-center">
             <NavLink
               to="/"
@@ -124,18 +158,19 @@ function Navbar() {
             >
               Home
             </NavLink>
-            {/* Category */}
             <div className="w-full">
               <button
                 onClick={() => setDropdownCategoryOpen(!dropdownCategoryOpen)}
-                className="w-full py-3 text-xl text-gray-700 hover:bg-[#95B9FF] hover:text-white transition"
+                className="w-full py-2 gap-2 text-xl text-gray-700 hover:bg-[#95B9FF] hover:text-white transition flex text-center justify-center"
               >
-                Category{" "}
-                {dropdownCategoryOpen ? <GoChevronUp /> : <GoChevronDown />}
+                Category
+                <div className="flex justify-center items-center">
+                  {dropdownCategoryOpen ? <GoChevronUp /> : <GoChevronDown />}
+                </div>
               </button>
 
               {dropdownCategoryOpen && (
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center z-[9999]">
                   <NavLink
                     to="/comedy"
                     className="py-2 text-gray-700 hover:bg-[#95B9FF] hover:text-white transition w-full text-center"
@@ -181,7 +216,6 @@ function Navbar() {
                 </div>
               )}
             </div>
-            {/* My book */}
             <NavLink
               to="/mybook"
               className="py-3 text-xl text-gray-700 hover:bg-[#95B9FF] hover:text-white transition w-full text-center"
