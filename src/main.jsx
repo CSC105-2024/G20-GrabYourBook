@@ -12,6 +12,8 @@ import { StrictMode, useState, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Booking from './pages/Booking.jsx'
+import BookingSuccessPage from './pages/ConfirmBookingPage.jsx'
 import DetailAva from "./pages/DetailBookava.jsx";
 import LoginContext from "./context/LoginContext";
 
@@ -58,10 +60,18 @@ const router = createBrowserRouter([
     element: <Lgbtq />,
   },
   {
+    path: "/booking/:id",
+    element: <Booking/>,
+  },
+  {
+    path: "/booking-success/:id",
+    element: <BookingSuccessPage/>
+  },
+  {
     path: "/detailava",
     element: <DetailAva />,
   },
-]);
+])
 
 function RootWithContext() {
   const [isLogin, setIsLogin] = useState(() => {
