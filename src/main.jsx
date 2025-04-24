@@ -1,20 +1,21 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import HomePage from './pages/HomePage.jsx'
-import Login from './pages/Login.jsx'
-import Mybook from './pages/Mybook.jsx'
-import Comedy from './pages/Comedy.jsx'
-import Register from './pages/Register.jsx'
-import Drama from './pages/Drama.jsx'
-import Fantasy from './pages/Fantasy.jsx'
-import Horror from './pages/Horror.jsx'
-import Romance from './pages/Romance.jsx'
-import Lgbtq from './pages/Lgbtq.jsx'
+import HomePage from "./pages/HomePage.jsx";
+import Login from "./pages/Login.jsx";
+import Mybook from "./pages/Mybook.jsx";
+import Comedy from "./pages/Comedy.jsx";
+import Register from "./pages/Register.jsx";
+import Drama from "./pages/Drama.jsx";
+import Fantasy from "./pages/Fantasy.jsx";
+import Horror from "./pages/Horror.jsx";
+import Romance from "./pages/Romance.jsx";
+import Lgbtq from "./pages/Lgbtq.jsx";
+import { StrictMode, useState, useEffect } from "react";
+import { createRoot } from "react-dom/client";
+import "./index.css";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Booking from './pages/Booking.jsx'
 import BookingSuccessPage from './pages/ConfirmBookingPage.jsx'
-import DetailAva from './pages/DetailBookava.jsx'
+import DetailAva from "./pages/DetailBookava.jsx";
+import LoginContext from "./context/LoginContext";
 
 const router = createBrowserRouter([
   {
@@ -77,12 +78,20 @@ function RootWithContext() {
     const saved = localStorage.getItem("isLogin");
     return saved === "true";
   });
+
+  useEffect(() => {
+    localStorage.setItem("isLogin", isLogin);
+  }, [isLogin]);
+
+  return (
+    <LoginContext.Provider value={{ isLogin, setIsLogin }}>
+      <RouterProvider router={router} />
+    </LoginContext.Provider>
+  );
 }
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-      <RouterProvider router={router}>
-      <RootWithContext/>
-      </RouterProvider>
+    <RootWithContext />
   </StrictMode>
 );
