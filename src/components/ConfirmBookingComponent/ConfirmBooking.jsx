@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import harryImg from "../images/harry.jpg";
-import hobbitImg from "../images/hobbit.jpg";
-import Percy from "../images/Percy.jpg";
-import Sherlock from "../images/sherlock.jpg";
-import confirmErrorIcon from "../icons/bookingError.svg";
+import harryImg from "../../images/harry.jpg";
+import hobbitImg from "../../images/hobbit.jpg";
+import Percy from "../../images/Percy.jpg";
+import Sherlock from "../../images/sherlock.jpg";
+import confirmErrorIcon from "../../icons/bookingError.svg";
 
 const books = [
   {

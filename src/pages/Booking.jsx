@@ -1,6 +1,6 @@
 import React from 'react'
 import Navbar from '../components/Navbar'
-import ConfirmBooking from '../components/Confirmbooking';
+import ConfirmBooking from '../components/ConfirmBookingComponent/ConfirmBooking';
 
 function Booking() {
   return (

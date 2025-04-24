@@ -13,7 +13,7 @@ import Horror from './pages/Horror.jsx'
 import Romance from './pages/Romance.jsx'
 import Lgbtq from './pages/Lgbtq.jsx'
 import Booking from './pages/Booking.jsx'
-import BookingSuccessPage from './components/confirmBookingPopup.jsx'
+import BookingSuccessPage from './pages/ConfirmBookingPage.jsx'
 import DetailAva from './pages/DetailBookava.jsx'
 
 const router = createBrowserRouter([
