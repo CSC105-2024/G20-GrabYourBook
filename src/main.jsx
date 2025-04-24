@@ -16,6 +16,7 @@ import Booking from './pages/Booking.jsx'
 import BookingSuccessPage from './pages/ConfirmBookingPage.jsx'
 import DetailAva from "./pages/DetailBookava.jsx";
 import LoginContext from "./context/LoginContext";
+import Search from "./pages/Search.jsx";
 
 const router = createBrowserRouter([
   {
@@ -70,6 +71,11 @@ const router = createBrowserRouter([
   {
     path: "/detailava",
     element: <DetailAva />,
+  },
+
+  {
+    path: "/search",
+    element: <Search/>,
   },
 ])
 
