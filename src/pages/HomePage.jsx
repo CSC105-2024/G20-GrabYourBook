@@ -65,7 +65,6 @@
 
 // export default HomePage;
 
-import "../App.css";
 import React, { useContext } from "react";
 import Navbar from "../components/Navbar";
 import NotLogInGrabyourbook from "../components/homecomponent/NotLogInGrabyourbook";

@@ -8,7 +8,7 @@ const BookingSuccessPage = () => {
   const { id } = useParams();
 
   return (
-    <div className="relative w-full h-screen flex items-center justify-center bg-neutral-200 px-4">
+    <div className="relative w-full h-screen flex items-center justify-center bg-neutral-200 px-4 overflow-hidden">
       <div className="absolute w-[2000px] h-[1000px] left-[60%] top-[-30%] bg-indigo-300 rounded-full blur-[150px]" />
       <div className="absolute w-[1000px] h-[600px] left-[65%] top-[10%] bg-blue-500 rounded-full blur-[250px]" />
 

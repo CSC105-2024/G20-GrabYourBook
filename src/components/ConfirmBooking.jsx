@@ -49,7 +49,15 @@ const ConfirmBooking = () => {
   useEffect(() => {
     const foundBook = books.find((b) => b.id === id);
     setBook(foundBook);
-  }, [id]);
+
+    if(bookingError) {
+      const timer = setTimeout(() => {
+        setBookingError("");
+        setShakeTrigger(false);
+      }, 3000)
+      return () => setTimeout(timer);
+    }
+  }, [id, bookingError]);
 
   const handleStartDateChange = (e) => {
     const selectedDate = new Date(e.target.value);
@@ -61,9 +69,19 @@ const ConfirmBooking = () => {
     setEndDate(formattedEndDate);
   };
 
+  const [shakeTrigger, setShakeTrigger] = useState(false);
+
+  const triggerShake = () => {
+    setShakeTrigger(false);
+    requestAnimationFrame(() => {
+      setShakeTrigger(true);
+    });
+  };
+
   const handleBooking = () => {
     if (!startDate) {
       setBookingError("Please select a start date before booking.");
+      triggerShake();
       return;
     }
 
@@ -80,16 +98,16 @@ const ConfirmBooking = () => {
   }
 
   return (
-    <div
-      className="w-full min-h-[calc(100vh-64px)] bg-neutral-200 overflow-hidden relative flex justify-center items-center px-4"
-    >
+    <div className="w-full min-h-[calc(100vh-64px)] bg-neutral-200 overflow-hidden relative flex justify-center items-center px-4">
       <div className="w-[2000px] h-[1000px] left-[60%] top-[-30%] absolute bg-indigo-300 rounded-full blur-[150px]" />
       <div className="w-[1000px] h-[600px] left-[65%] top-[10%] absolute bg-blue-500 rounded-full blur-[250px]" />
       <div className="w-[1500px] h-[700px] right-[70%] top-[-30%] absolute bg-indigo-200 rounded-full blur-[150px]" />
 
       <div className=" flex flex-col justify-center">
         {bookingError && (
-          <div className="max-w-[800px] md:rounded-2xl md:shadow-xl p-3 flex flex-row text-xs md:flex-row  justify-center gap-1 md:gap-5 items-center md:w-[600px] mb-4 w-full bg-white md:bg-white text-black md:text-lg text-bold rounded-xl text-center font-semibold z-30 font-['Poppins']">
+          <div className={`max-w-[800px] max-h-[60px] md:rounded-2xl md:shadow-xl p-3 flex flex-row text-xs md:flex-row  justify-center gap-1 md:gap-5 items-center md:w-[600px] mb-4 w-full bg-white text-black md:text-lg text-bold rounded-xl text-center font-semibold z-30 font-['Poppins'] ${
+            shakeTrigger ? "animate-shake" : "animate-fadeInScale"
+          }`}>
             <img
               src={confirmErrorIcon}
               alt="error icon"
