@@ -13,6 +13,7 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import DetailAva from "./pages/DetailBookava.jsx";
+import LoginContext from "./context/LoginContext";
 
 const router = createBrowserRouter([
   {
@@ -67,12 +68,20 @@ function RootWithContext() {
     const saved = localStorage.getItem("isLogin");
     return saved === "true";
   });
+
+  useEffect(() => {
+    localStorage.setItem("isLogin", isLogin);
+  }, [isLogin]);
+
+  return (
+    <LoginContext.Provider value={{ isLogin, setIsLogin }}>
+      <RouterProvider router={router} />
+    </LoginContext.Provider>
+  );
 }
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-      <RouterProvider router={router}>
-      <RootWithContext/>
-      </RouterProvider>
+    <RootWithContext />
   </StrictMode>
 );
