@@ -62,8 +62,8 @@ function Comedy() {
     <div className="relative min-h-screen  w-full">
       <div className="absolute inset-0 -z-10">
         <div className="w-full h-full overflow-hidden flex items-center justify-center absolute ">
-          <div className="w-[1000px] h-[1400px] left-[-300px] top-[-500px] sm:w-[1360px] sm:h-[1500px] sm:left-[40%] sm:top-[-30%] absolute bg-[#8B73A0] rounded-full blur-[100px] sm:blur-[254.50px]" />
-          <div className="w-[900px] h-[1200px] right-[-200px] top-[-700px] sm:w-[1200px] sm:h-[1500px] sm:right-[-400px] sm:top-[-70%] absolute bg-[#4E7DD7] blur-[150px] sm:blur-[254.50px]" />
+          <div className="w-[170vw] h-[140vh] left-[-40%] top-[-10%] sm:w-[100vh] sm:h-[180vw]  md:w-[100vw] md:h-[180vh] md:left-[20%] md:top-[-10%] absolute bg-[#8B73A0] rounded-full blur-[100px] sm:blur-[250px]" />
+          <div className="w-[160vw] h-[130vh] right-[-18%] top-[-50%] sm:w-[90vh] sm:h-[160vh]  md:w-[90vw]  md:h-[160vh] md:right-[-30%] md:top-[-50%] absolute bg-[#4E7DD7] blur-[150px] sm:blur-[250px]" />
         </div>
       </div>
 
@@ -71,26 +71,26 @@ function Comedy() {
         <Navbar />
       </div>
 
-      <div className="relative z-10 flex flex-col justify-center min-h-[calc(100vh-64px)] items-center px-4 py-4 mt-6 w-full max-w-screen-xl mx-auto">
+      <div className="relative z-10 flex flex-col min-w-[70svw] justify-center min-h-[calc(100vh-64px)] items-center px-4 py-4 mt-6 w-full max-w-screen-xl mx-auto">
         <h3 className="font-bold flex w-full text-2xl text-white sm:text-[#092737] mb-6">
           Comedy
         </h3>
 
-        <div className="w-full bg-white/60 rounded-2xl p-4 sm:p-6 shadow">
-          <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
+        <div className="w-full min-h-svh sm:min-h-[80vh] md:min-h-[135vh] lg:min-h-[85vh] xl:min-h-[90vh] 2xl:min-h-[60vh] min-w-[70svw] bg-white/60 rounded-2xl p-4 sm:p-6 shadow">
+          <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-6 gap-4 sm:gap-y-15">
             {currentBooks.map((book, i) => (
               <div key={i} className="flex flex-col items-center text-center">
-                <div className="bg-white w-full aspect-[7/10] rounded-lg overflow-hidden flex items-center justify-center p-2">
+                <div className="bg-white w-full aspect-[7/10] max-sm:max-w-[12rem] rounded-lg overflow-hidden flex items-center justify-center p-2">
                   <img
                     src={book.cover}
                     alt={book.title}
                     className="w-full h-full object-cover rounded"
                   />
                 </div>
-                <h3 className="text-sm text-left font-semibold mt-2 w-full truncate">
+                <h3 className="text-sm text-left font-semibold mt-3 max-sm:max-w-[12rem] w-full truncate">
                   {truncateText(book.title, isMobile ? 14 : 22)}
                 </h3>
-                <p className="text-xs text-left text-gray-600 w-full truncate">
+                <p className="text-xs text-left text-gray-600 max-sm:max-w-[12rem]  w-full truncate">
                   {truncateText(book.author, isMobile ? 16 : 28)}
                 </p>
               </div>

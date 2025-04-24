@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { z } from "zod";
 import errorIcons from "../icons/errorIcons.svg";
 import successfullyIcon from "../icons/successfullyIcons.svg";
 import { Link, useNavigate } from "react-router-dom";
+import LoginContext from "../context/LoginContext";
 
 const userSchema = z.object({
   username: z.string().min(1, "Username is required"),
@@ -18,6 +19,7 @@ const Login = () => {
   const [errors, setErrors] = useState({ username: "", password: "" });
   const [loginStatus, setLoginStatus] = useState("");
   const [shakeTrigger, setShakeTrigger] = useState(false);
+  const { setIsLogin } = useContext(LoginContext);
 
   const triggerShake = () => {
     setShakeTrigger(false);
@@ -29,6 +31,7 @@ const Login = () => {
   useEffect(() => {
     if (loginStatus === "success") {
       const timer = setTimeout(() => {
+        setIsLogin(true);
         navigate("/");
       }, 1300);
       return () => clearTimeout(timer);
@@ -38,7 +41,7 @@ const Login = () => {
       const timer = setTimeout(() => setLoginStatus(""), 2500);
       return () => clearTimeout(timer);
     }
-  }, [loginStatus, navigate]);
+  }, [loginStatus, navigate, setIsLogin]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -92,11 +95,7 @@ const Login = () => {
           >
             <div className="w-full flex items-center justify-center gap-2 text-center py-2 px-4 rounded-xl text-black bg-white font-bold shadow-md">
               <img
-                src={
-                  loginStatus === "success"
-                    ? successfullyIcon
-                    : errorIcons
-                }
+                src={loginStatus === "success" ? successfullyIcon : errorIcons}
                 alt="status icon"
                 className="w-6 h-6 md:w-8 md:h-8"
               />
@@ -134,7 +133,9 @@ const Login = () => {
                 className="w-full h-14 p-4 bg-zinc-100 rounded-2xl outline-none"
               />
               {errors.username && (
-                <div className="text-red-500 text-sm mt-1">{errors.username}</div>
+                <div className="text-red-500 text-sm mt-1">
+                  {errors.username}
+                </div>
               )}
             </div>
 
@@ -151,7 +152,9 @@ const Login = () => {
                 className="w-full h-14 p-4 bg-zinc-100 rounded-2xl outline-none"
               />
               {errors.password && (
-                <div className="text-red-500 text-sm mt-1">{errors.password}</div>
+                <div className="text-red-500 text-sm mt-1">
+                  {errors.password}
+                </div>
               )}
             </div>
 
