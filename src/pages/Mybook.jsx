@@ -153,7 +153,7 @@ const App = () => {
       <div className="w-full h-full  flex  relative -z-10">
         
           <div className="w-[1246px] h-[1529px] right-[50%] top-[-500px] absolute bg-indigo-400 rounded-full blur-[400px] -z-10" />
-          <div className="w-[690px] h-[921px] right-[80%] top-[-315px] absolute bg-blue-400 blur-[520px] -z-10" />
+          <div className="w-[690px] h-[921px] right-[85%] top-[-315px] absolute bg-blue-400 blur-[520px] -z-10" />
         
       </div>
 
