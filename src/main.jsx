@@ -14,6 +14,8 @@ import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import DetailAva from "./pages/DetailBookava.jsx";
 import LoginContext from "./context/LoginContext";
+import CancleMyBookPage from "./pages/CancleMyBookPage.jsx";
+import CancleSuccessPage from "./pages/CancleSuccessPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -61,6 +63,14 @@ const router = createBrowserRouter([
     path: "/detailava",
     element: <DetailAva />,
   },
+  {
+    path: "/canclewarning",
+    element: <CancleMyBookPage />,
+  },
+  {
+    path: "/canclesuccess",
+    element: <CancleSuccessPage />,
+  }
 ]);
 
 function RootWithContext() {
