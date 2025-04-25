@@ -40,7 +40,6 @@ const router = createBrowserRouter([
     path: "/comedy",
     element: <Comedy />,
   },
-
   {
     path: "/drama",
     element: <Drama />,
@@ -73,7 +72,6 @@ const router = createBrowserRouter([
     path: "/detailava",
     element: <DetailAva />,
   },
-<<<<<<< HEAD
   {
     path: "/canclewarning",
     element: <CancleMyBookPage />,
@@ -83,9 +81,6 @@ const router = createBrowserRouter([
     element: <CancleSuccessPage />,
   }
 ]);
-=======
-])
->>>>>>> 61a8b6ecb9fee690a80e4d9cc04f023cfc177650
 
 function RootWithContext() {
   const [isLogin, setIsLogin] = useState(() => {

@@ -59,7 +59,7 @@ function Fantasy() {
   const currentBooks = pages[currentPage - 1];
 
   return (
-    <div className="relative min-h-screen  w-full">
+    <div className="relative min-h-screen w-full">
       <div className="absolute inset-0 -z-10">
         <div className="w-full h-full overflow-hidden flex items-center justify-center absolute ">
           <div className="w-[170vw] h-[140vh] left-[-40%] top-[-10%] sm:w-[100vh] sm:h-[180vw]  md:w-[100vw] md:h-[180vh] md:left-[20%] md:top-[-10%] absolute bg-[#8B73A0] rounded-full blur-[100px] sm:blur-[250px]" />
