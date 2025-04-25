@@ -15,6 +15,8 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Booking from './pages/Booking.jsx'
 import BookingSuccessPage from './pages/ConfirmBookingPage.jsx'
 import LoginContext from "./context/LoginContext";
+import CancleMyBookPage from "./pages/CancleMyBookPage.jsx";
+import CancleSuccessPage from "./pages/CancleSuccessPage.jsx";
 import Search from "./pages/Search.jsx";
 import DetailBook from "./pages/DetailBook.jsx";
 
@@ -39,7 +41,6 @@ const router = createBrowserRouter([
     path: "/comedy",
     element: <Comedy />,
   },
-
   {
     path: "/drama",
     element: <Drama />,
@@ -69,6 +70,14 @@ const router = createBrowserRouter([
     element: <BookingSuccessPage/>
   },
   {
+    path: "/canclewarning",
+    element: <CancleMyBookPage />,
+  },
+  {
+    path: "/canclesuccess",
+    element: <CancleSuccessPage />,
+  },
+  {
     path: "/search",
     element: <Search/>,
   },
@@ -76,7 +85,7 @@ const router = createBrowserRouter([
     path: "/detailbook",
     element: <DetailBook/>,
   }
-])
+]);
 
 function RootWithContext() {
   const [isLogin, setIsLogin] = useState(() => {
