@@ -20,7 +20,7 @@ const CancleSuccessPage = () => {
         <div className="relative z-10 bg-white rounded-2xl p-8 w-full max-w-md shadow-xl flex flex-col items-center text-center min-h-[380px]">
           <button
             onClick={() =>
-              navigate("/mybook", { state: { book: updateBooks } })
+              navigate("/mybook", { state: { books: updateBooks } })
             }
             className="absolute top-4 right-4 w-7 h-7 flex items-center justify-center hover:bg-gray-100 rounded-full"
           >

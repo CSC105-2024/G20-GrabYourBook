@@ -88,13 +88,14 @@ const Mybook = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const [reservedBooks, setReservedBooks] = useState([]);
+  const [reservedBooks, setReservedBooks] = useState(() => {
+    const saved = localStorage.getItem("reservedBooks");
+    return saved ? JSON.parse(saved) : [];
+  });
 
   useEffect(() => {
-    if (location.state?.books) {
-      setReservedBooks(location.state.books);
-    } 
-  }, [location.state]);
+    localStorage.setItem("reservedBooks", JSON.stringify(reservedBooks));
+  }, [reservedBooks]);
 
   const handleCancle = (bookId) => {
     navigate("/canclewarning", {
@@ -107,7 +108,8 @@ const Mybook = () => {
       (book) => !reservedBooks.some((b) => b.id === book.id)
     );
     if (remainingBooks.length === 0) return;
-    const rand = remainingBooks[Math.floor(Math.random() * remainingBooks.length)];
+    const rand =
+      remainingBooks[Math.floor(Math.random() * remainingBooks.length)];
     setReservedBooks((prev) => [...prev, rand]);
   };
 
@@ -136,7 +138,8 @@ const Mybook = () => {
             {book.title}
           </h1>
           <p className="text-sm sm:text-base font-medium text-black font-['Poppins']">
-            Start Date: {new Date(book.reserveStart).toLocaleDateString("en-GB")}
+            Start Date:{" "}
+            {new Date(book.reserveStart).toLocaleDateString("en-GB")}
           </p>
           <p className="text-sm sm:text-base font-medium text-black font-['Poppins']">
             End Date: {new Date(book.reserveEnd).toLocaleDateString("en-GB")}
@@ -146,7 +149,7 @@ const Mybook = () => {
         <div className="flex sm:justify-end">
           <button
             onClick={() => handleCancle(book.id)}
-            className="bg-[#001F8B] hover:bg-[#0033cc] text-white text-sm sm:text-base font-semibold px-6 py-2 rounded-xl w-full sm:w-[40%] transition"
+            className="bg-[#001F8B] hover:bg-[#0033cc] text-white text-sm sm:text-base font-semibold px-6 py-2 rounded-xl w-full md:w-[40%] transition"
           >
             Cancel
           </button>

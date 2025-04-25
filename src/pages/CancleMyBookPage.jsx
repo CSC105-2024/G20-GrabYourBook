@@ -10,7 +10,8 @@ const CancleMyBookPage = () => {
   const { bookId, books } = location.state || {};
 
   const handleYes = () => {
-    const updateBooks = books.filter((book) => book.id != bookId);
+    const updateBooks = books.filter((book) => book.id !== bookId);
+    localStorage.setItem("reservedBooks", JSON.stringify(updateBooks));
     navigate("/canclesuccess", { state: { books: updateBooks } });
   };
 
