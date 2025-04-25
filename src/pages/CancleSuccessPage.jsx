@@ -17,7 +17,7 @@ const CancleSuccessPage = () => {
         <Navbar />
       </div>
       <div className="relative w-full h-screen flex items-center justify-center  px-4 ">
-        <div className="relative z-10 bg-white rounded-2xl p-8 w-full max-w-md shadow-xl flex flex-col items-center text-center min-h-[380px]">
+        <div className="relative z-10 bg-white rounded-2xl p-8 w-full max-w-md shadow-xl flex flex-col items-center text-center min-h-[380px] animate-fadeInScale">
           <button
             onClick={() =>
               navigate("/mybook", { state: { books: updateBooks } })

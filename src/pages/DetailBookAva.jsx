@@ -27,7 +27,7 @@ function DetailBook() {
             <img src={pic} alt="book" className="w-full h-80 rounded-2xl" />
 
             <div className="flex flex-row">
-              <p className="text-yellow-900 font-normal">Remaining 1 opies</p>
+              <p className="text-yellow-900 font-normal">Remaining 1 copies</p>
             </div>
 
             <div className="text-center text-[#418C86] text-2xl font-semibold leading-tight">
@@ -40,11 +40,6 @@ function DetailBook() {
             >
               Borrow a book
             </button>
-            <div className="flex flex-row ">
-              <p className="text-xs text-yellow-900 text-center mt-1">
-                Nearest available date : 29/02/2025
-              </p>
-            </div>
           </div>
 
           <div className="Right Box flex flex-col gap-6 text-black max-w-xl mt-0 ">

@@ -7,12 +7,12 @@ import Navbar from "../components/Navbar";
 const CancleMyBookPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { bookId, books } = location.state || {};
+  const { bookingId, books } = location.state;
 
   const handleYes = () => {
-    const updateBooks = books.filter((book) => book.id !== bookId);
-    localStorage.setItem("reservedBooks", JSON.stringify(updateBooks));
-    navigate("/canclesuccess", { state: { books: updateBooks } });
+    const updatedBooks = books.filter((book) => book.bookingId !== bookingId);
+    localStorage.setItem("reservedBooks", JSON.stringify(updatedBooks));
+    navigate("/canclesuccess", { state: { books: updatedBooks } });
   };
 
   return (
@@ -23,8 +23,8 @@ const CancleMyBookPage = () => {
       <div className="relative z-20">
         <Navbar />
       </div>
-      <div className="relative w-full h-screen flex items-center justify-center  px-4 ">
-        <div className="relative z-10 bg-white rounded-2xl p-8 w-full max-w-md shadow-xl flex flex-col items-center text-center min-h-[380px]">
+      <div className="relative w-full h-screen flex items-center justify-center  px-4">
+        <div className="relative z-10 bg-white rounded-2xl p-8 w-full max-w-md shadow-xl flex flex-col items-center text-center min-h-[380px] animate-fadeInScale">
           <button
             onClick={() => navigate("/mybook", { state: { books } })}
             className="absolute top-4 right-4 w-7 h-7 flex items-center justify-center hover:bg-gray-100 rounded-full"

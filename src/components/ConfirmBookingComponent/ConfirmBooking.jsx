@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import harryImg from "../../images/harry.jpg";
-import hobbitImg from "../../images/hobbit.jpg";
-import Percy from "../../images/Percy.jpg";
-import Sherlock from "../../images/sherlock.jpg";
 import confirmErrorIcon from "../../icons/bookingError.svg";
-import women from "../../images/womeninme.jpg"
+import women from "../../images/womeninme.jpg";
 
 const books = [
   {
@@ -20,25 +17,23 @@ const books = [
     image: women,
     description: "",
   },
-  {
-    id: "3",
-    title: "The Hobbit",
-    image: hobbitImg,
-    description: "",
-  },
-  {
-    id: "4",
-    title: "Percy",
-    image: Percy,
-    description: "",
-  },
-  {
-    id: "5",
-    title: "Sherlock",
-    image: Sherlock,
-    description: "",
-  },
 ];
+
+const addToMyBooks = (book, startDate, endDate) => {
+  const currentBooks = JSON.parse(localStorage.getItem("reservedBooks")) || [];
+  const newBook = {
+    bookingId: Date.now() + Math.random(),
+    id: book.id,
+    title: book.title,
+    cover: book.image,
+    reserveStart: startDate,
+    reserveEnd: endDate,
+  };
+  localStorage.setItem(
+    "reservedBooks",
+    JSON.stringify([...currentBooks, newBook])
+  );
+};
 
 const cutTitle = (title, maxLength = 20) => {
   return title.length > maxLength ? title.slice(0, maxLength) + "..." : title;
@@ -57,11 +52,11 @@ const ConfirmBooking = () => {
     const foundBook = books.find((b) => b.id === id);
     setBook(foundBook);
 
-    if(bookingError) {
+    if (bookingError) {
       const timer = setTimeout(() => {
         setBookingError("");
         setShakeTrigger(false);
-      }, 3000)
+      }, 3000);
       return () => setTimeout(timer);
     }
   }, [id, bookingError]);
@@ -93,6 +88,7 @@ const ConfirmBooking = () => {
     }
 
     setBookingError("");
+    addToMyBooks(book, startDate, endDate);
     navigate(`/booking-success/${id}`);
   };
 
@@ -126,7 +122,7 @@ const ConfirmBooking = () => {
           </div>
         )}
 
-        <div className="z-20 w-full max-w-[800px] md:bg-white md:rounded-2xl md:shadow-xl p-6 flex flex-col items-center gap-10 md:w-[600px] md:h-[450px]">
+        <div className="z-20 w-full max-w-[800px] md:bg-white md:rounded-2xl md:shadow-xl p-6 flex flex-col items-center gap-10 md:w-[600px] md:h-[450px] animate-fadeInScale">
           <h2 className="text-2xl font-bold text-center w-full mt-3 font-['Poppins']">
             Confirm Booking
           </h2>

@@ -4,8 +4,7 @@ import pic from "../images/harry.jpg";
 import { Navigate, useNavigate } from "react-router-dom";
 
 function DetailBook() {
-
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -28,7 +27,7 @@ function DetailBook() {
             <img src={pic} alt="book" className="w-full h-80 rounded-2xl" />
 
             <div className="flex flex-row">
-              <p className="text-yellow-900 font-normal">Remaining 0 opies</p>
+              <p className="text-yellow-900 font-normal">Remaining 0 copies</p>
             </div>
 
             <div className="text-center text-[#E54545] text-2xl font-semibold leading-tight">
