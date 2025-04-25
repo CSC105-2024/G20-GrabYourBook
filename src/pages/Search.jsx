@@ -11,8 +11,11 @@ import Sherlock from "../images/sherlock.jpg";
 import Alchemist from "../images/alchemist.jpg";
 import Little from "../images/littlemermaid.jpg";
 import WomenInMe from "../images/womeninme.jpg";
+import { Navigate, useNavigate } from "react-router-dom";
 
 function App() {
+
+  const Navigate = useNavigate ();
   const books = [
     {
       title: "Harry Potter and the Chamber of Secrets",
@@ -87,7 +90,10 @@ function App() {
           <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-6 gap-4 sm:gap-y-15">
             {currentBooks.map((book, i) => (
               <div key={i} className="flex flex-col items-center text-center">
-                <div className="bg-white w-full aspect-[7/10] max-sm:max-w-[12rem] rounded-lg overflow-hidden flex items-center justify-center p-2">
+                <div 
+
+                onClick={() => Navigate("/detailbook")}
+                className="bg-white w-full aspect-[7/10] max-sm:max-w-[12rem] rounded-lg overflow-hidden flex items-center justify-center p-2">
                   <img
                     src={book.cover}
                     alt={book.title}
