@@ -14,9 +14,9 @@ import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Booking from './pages/Booking.jsx'
 import BookingSuccessPage from './pages/ConfirmBookingPage.jsx'
-import DetailAva from "./pages/DetailBookava.jsx";
 import LoginContext from "./context/LoginContext";
 import Search from "./pages/Search.jsx";
+import DetailBook from "./pages/DetailBook.jsx";
 
 const router = createBrowserRouter([
   {
@@ -69,14 +69,13 @@ const router = createBrowserRouter([
     element: <BookingSuccessPage/>
   },
   {
-    path: "/detailava",
-    element: <DetailAva />,
-  },
-
-  {
     path: "/search",
     element: <Search/>,
   },
+  {
+    path: "/detailbook",
+    element: <DetailBook/>,
+  }
 ])
 
 function RootWithContext() {
