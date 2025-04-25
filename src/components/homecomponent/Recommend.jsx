@@ -10,8 +10,20 @@ import Sherlock from "../../images/sherlock.jpg";
 import Alchemist from "../../images/alchemist.jpg";
 import Little from "../../images/littlemermaid.jpg";
 import WomenInMe from "../../images/womeninme.jpg";
+import { Navigate, useNavigate } from "react-router-dom";
+
 
 function Recommend() {
+    const Navigate = useNavigate();
+    const handleClick = (book) => {
+      if (book.title === "The Women In...") {
+        Navigate("/detailbookava");
+      } else {
+        Navigate("/detailbook");
+      }
+    };
+
+
   const books = [
     { title: "Harry Potter ...", author: "J.K Rowling's", cover: Harry },
     { title: "The Women In...", author: "Britney Spears", cover: WomenInMe },
@@ -63,20 +75,23 @@ function Recommend() {
                 key={i}
                 className="flex-none w-[85px] sm:w-[180px] snap-center"
               >
-                <img
-                  src={book.cover}
-                  alt={book.title}
-                  className="w-full h-[140px] sm:h-[270px] object-cover rounded-lg shadow"
-                />
-                <h3 className="text-sm sm:text-lg font-semibold mt-2 truncate">
-                  {book.title}
-                </h3>
-                <p className="text-xs sm:text-sm text-gray-600 truncate">
-                  {book.author}
-                </p>
-                <button className="mt-2 max-w-40 text-xs sm:text-sm py-1 px-2 bg-[#418C86] text-white rounded">
-                  Available
-                </button>
+                {" "}
+                <div onClick={() => handleClick(book)}>
+                  <img
+                    src={book.cover}
+                    alt={book.title}
+                    className="w-full h-[140px] sm:h-[270px] object-cover rounded-lg shadow"
+                  />
+                  <h3 className="text-sm sm:text-lg font-semibold mt-2 truncate">
+                    {book.title}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-gray-600 truncate">
+                    {book.author}
+                  </p>
+                  <button className="mt-2 max-w-40 text-xs sm:text-sm py-1 px-2 bg-[#418C86] text-white rounded">
+                    Available
+                  </button>
+                </div>
               </div>
             ))}
           </div>
