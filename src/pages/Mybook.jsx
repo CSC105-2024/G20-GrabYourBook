@@ -93,9 +93,7 @@ const Mybook = () => {
   useEffect(() => {
     if (location.state?.books) {
       setReservedBooks(location.state.books);
-    } else {
-      setReservedBooks(books.slice(0, 3));
-    }
+    } 
   }, [location.state]);
 
   const handleCancle = (bookId) => {
