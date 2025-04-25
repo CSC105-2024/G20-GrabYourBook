@@ -37,6 +37,18 @@ const cutTitle = (title, maxLength = 20) => {
   return title.length > maxLength ? title.slice(0, maxLength) + "..." : title;
 };
 
+const addToMyBooks = (book, startDate, endDate) => {
+  const currentBooks = JSON.parse(localStorage.getItem("myBooks")) || [];
+  const newBook = {
+    id: book.id,
+    title: book.title,
+    cover: book.image,
+    reserveStart: startDate,
+    reserveEnd: endDate,
+  };
+  localStorage.setItem("myBooks", JSON.stringify([...currentBooks, newBook]));
+};
+
 const ConfirmBooking = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -50,11 +62,11 @@ const ConfirmBooking = () => {
     const foundBook = books.find((b) => b.id === id);
     setBook(foundBook);
 
-    if(bookingError) {
+    if (bookingError) {
       const timer = setTimeout(() => {
         setBookingError("");
         setShakeTrigger(false);
-      }, 3000)
+      }, 3000);
       return () => setTimeout(timer);
     }
   }, [id, bookingError]);
@@ -86,6 +98,7 @@ const ConfirmBooking = () => {
     }
 
     setBookingError("");
+    addToMyBooks(book, startDate, endDate);
     navigate(`/booking-success/${id}`);
   };
 
