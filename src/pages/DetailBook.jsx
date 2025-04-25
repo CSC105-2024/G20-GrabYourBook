@@ -25,7 +25,7 @@ function DetailBook() {
             flex flex-col md:flex-row gap-18 justify-center items-center z-10"
         >
           <div className="Left Box flex flex-col items-center gap-3 w-[258px]">
-            <img src={pic} alt="book" className="w-full h-66 rounded-2xl" />
+            <img src={pic} alt="book" className="w-full h-80 rounded-2xl" />
 
             <div className="flex flex-row">
               <p className="text-yellow-900 font-normal">Remaining 0 opies</p>
@@ -49,20 +49,20 @@ function DetailBook() {
             </div>
           </div>
 
-          <div className="Right Box flex flex-col gap-5 text-black max-w-xl  ">
+          <div className="Right Box flex flex-col gap-6 text-black max-w-xl  ">
             <h1 className="text-2xl md:text-4xl font-bold text-[#061C6A]">
               From The Films Of Harry Potter
             </h1>
             <p>
-              <span className="font-bold md:text-2xl">Author :</span>
+              <span className="font-bold md:text-3xl">Author :</span>
               <span className="font-semi md:text-xl"> JODY REVENSON</span>
             </p>
             <p>
-              <span className="font-bold md:text-2xl">Category :</span>
+              <span className="font-bold md:text-3xl">Category :</span>
               <span className="font-semi md:text-xl"> Novel, Comedy</span>
             </p>
             <div>
-              <p className="font-bold md:text-2xl ">Description :</p>
+              <p className="font-bold md:text-3xl ">Description :</p>
               <p className="text-sm  md:text-xl text-justify mt-1 leading-relaxed">
                 Harry Potter in 100 Objects presents a host of incredible props,
                 artefacts and set items from the legendary Harry Potter movies.
