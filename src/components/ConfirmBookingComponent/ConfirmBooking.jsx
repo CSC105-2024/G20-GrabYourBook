@@ -5,6 +5,7 @@ import hobbitImg from "../../images/hobbit.jpg";
 import Percy from "../../images/Percy.jpg";
 import Sherlock from "../../images/sherlock.jpg";
 import confirmErrorIcon from "../../icons/bookingError.svg";
+import women from "../../images/womeninme.jpg"
 
 const books = [
   {
@@ -15,18 +16,24 @@ const books = [
   },
   {
     id: "2",
+    title: "THE WOMEN IN ME",
+    image: women,
+    description: "",
+  },
+  {
+    id: "3",
     title: "The Hobbit",
     image: hobbitImg,
     description: "",
   },
   {
-    id: "3",
+    id: "4",
     title: "Percy",
     image: Percy,
     description: "",
   },
   {
-    id: "4",
+    id: "5",
     title: "Sherlock",
     image: Sherlock,
     description: "",
