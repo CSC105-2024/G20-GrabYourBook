@@ -16,6 +16,14 @@ import { Navigate, useNavigate } from "react-router-dom";
 function App() {
 
   const Navigate = useNavigate ();
+  const handleClick = (book) => {
+    if (book.title === "The Women In Me") {
+      Navigate("/detailbookava");
+    } else {
+      Navigate("/detailbook");
+    }
+  };
+
   const books = [
     {
       title: "Harry Potter and the Chamber of Secrets",
@@ -90,22 +98,21 @@ function App() {
           <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-6 gap-4 sm:gap-y-15">
             {currentBooks.map((book, i) => (
               <div key={i} className="flex flex-col items-center text-center">
-                <div 
-
-                onClick={() => Navigate("/detailbook")}
-                className="bg-white w-full aspect-[7/10] max-sm:max-w-[12rem] rounded-lg overflow-hidden flex items-center justify-center p-2">
-                  <img
-                    src={book.cover}
-                    alt={book.title}
-                    className="w-full h-full object-cover rounded"
-                  />
+                <div onClick={() => handleClick(book)}>
+                  <div className="bg-white w-full aspect-[7/10] max-sm:max-w-[12rem] rounded-lg overflow-hidden flex items-center justify-center p-2">
+                    <img
+                      src={book.cover}
+                      alt={book.title}
+                      className="w-full h-full object-cover rounded"
+                    />
+                  </div>
+                  <h3 className="text-sm text-left font-semibold mt-3 max-sm:max-w-[12rem] w-full truncate">
+                    {truncateText(book.title, isMobile ? 14 : 22)}
+                  </h3>
+                  <p className="text-xs text-left text-gray-600 max-sm:max-w-[12rem]  w-full truncate">
+                    {truncateText(book.author, isMobile ? 16 : 28)}
+                  </p>
                 </div>
-                <h3 className="text-sm text-left font-semibold mt-3 max-sm:max-w-[12rem] w-full truncate">
-                  {truncateText(book.title, isMobile ? 14 : 22)}
-                </h3>
-                <p className="text-xs text-left text-gray-600 max-sm:max-w-[12rem]  w-full truncate">
-                  {truncateText(book.author, isMobile ? 16 : 28)}
-                </p>
               </div>
             ))}
           </div>
