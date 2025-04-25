@@ -32,7 +32,7 @@ function DetailBook() {
 
             <div className="text-center text-[#418C86] text-2xl font-semibold leading-tight">
               <p>Currently</p>
-              <p> Available</p>
+              <p> available</p>
             </div>
             <button
               onClick={() => navigate("/booking/2")}
