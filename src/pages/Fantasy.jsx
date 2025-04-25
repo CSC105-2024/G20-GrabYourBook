@@ -11,8 +11,19 @@ import Sherlock from "../images/sherlock.jpg";
 import Alchemist from "../images/alchemist.jpg";
 import Little from "../images/littlemermaid.jpg";
 import WomenInMe from "../images/womeninme.jpg";
+import { Navigate,useNavigate } from "react-router-dom";
 
 function Fantasy() {
+
+  const Navigate = useNavigate();
+  const handleClick = (book) => {
+    if (book.title === "The Women In Me") {
+      Navigate("/detailbookava");
+    } else {
+      Navigate("/detailbook");
+    }
+  };
+
   const books = [
     {
       title: "Harry Potter and the Chamber of Secrets",
@@ -59,7 +70,7 @@ function Fantasy() {
   const currentBooks = pages[currentPage - 1];
 
   return (
-    <div className="relative min-h-screen  w-full">
+    <div className="relative min-h-screen w-full">
       <div className="absolute inset-0 -z-10">
         <div className="w-full h-full overflow-hidden flex items-center justify-center absolute ">
           <div className="w-[170vw] h-[140vh] left-[-40%] top-[-10%] sm:w-[100vh] sm:h-[180vw]  md:w-[100vw] md:h-[180vh] md:left-[20%] md:top-[-10%] absolute bg-[#8B73A0] rounded-full blur-[100px] sm:blur-[250px]" />
@@ -80,19 +91,21 @@ function Fantasy() {
           <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-6 gap-4 sm:gap-y-15">
             {currentBooks.map((book, i) => (
               <div key={i} className="flex flex-col items-center text-center">
-                <div className="bg-white w-full aspect-[7/10] max-sm:max-w-[12rem] rounded-lg overflow-hidden flex items-center justify-center p-2">
-                  <img
-                    src={book.cover}
-                    alt={book.title}
-                    className="w-full h-full object-cover rounded"
-                  />
+                <div onClick={() => handleClick(book)}>
+                  <div className="bg-white w-full aspect-[7/10] max-sm:max-w-[12rem] rounded-lg overflow-hidden flex items-center justify-center p-2">
+                    <img
+                      src={book.cover}
+                      alt={book.title}
+                      className="w-full h-full object-cover rounded"
+                    />
+                  </div>
+                  <h3 className="text-sm text-left font-semibold mt-3 max-sm:max-w-[12rem] w-full truncate">
+                    {truncateText(book.title, isMobile ? 14 : 22)}
+                  </h3>
+                  <p className="text-xs text-left text-gray-600 max-sm:max-w-[12rem]  w-full truncate">
+                    {truncateText(book.author, isMobile ? 16 : 28)}
+                  </p>
                 </div>
-                <h3 className="text-sm text-left font-semibold mt-3 max-sm:max-w-[12rem] w-full truncate">
-                  {truncateText(book.title, isMobile ? 14 : 22)}
-                </h3>
-                <p className="text-xs text-left text-gray-600 max-sm:max-w-[12rem]  w-full truncate">
-                  {truncateText(book.author, isMobile ? 16 : 28)}
-                </p>
               </div>
             ))}
           </div>
