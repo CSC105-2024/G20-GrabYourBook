@@ -1,6 +1,7 @@
 import React from "react";
 import Navbar from "../components/Navbar";
 import pic from "../images/harry.jpg";
+import { Navigate, useNavigate } from "react-router-dom";
 
 function DetailBook() {
   return (
@@ -8,22 +9,22 @@ function DetailBook() {
       <Navbar />
 
       <div className="relative w-screen min-h-screen flex items-center justify-center overflow-hidden">
-        {/* BACKGROUND */}
-        <div className="hidden md:flex absolute inset-0 items-center justify-center -z-10">
+
+        <div className="BG hidden md:flex absolute inset-0 items-center justify-center -z-10">
           <div className="w-[1095px] h-[1319px] bg-blue-500 blur-[254.5px]" />
         </div>
         <div className="md:hidden absolute top-0 left-0 -z-10">
           <div className="w-[600px] h-[600px] bg-blue-500 blur-[254.5px] rounded-full -translate-x-1/3 -translate-y-1/3" />
         </div>
 
-        {/* CONTENT */}
+
         <div
-          className="w-full max-w-[1000px] md:rounded-[20px] px-6 md:px-16 py-8 md:py-16 
+          className=" All Content w-full max-w-[1000px] md:rounded-[20px] px-6 md:px-16 py-8 md:py-16 
             md:bg-white bg-transparent md:shadow-lg shadow-none 
             flex flex-col md:flex-row gap-18 justify-center items-center z-10"
         >
-          {/* LEFT: IMAGE + STATUS */}
-          <div className="flex flex-col items-center gap-3 w-[258px]">
+
+          <div className="Left Box flex flex-col items-center gap-3 w-[258px]">
             <img src={pic} alt="book" className="w-full h-auto rounded-2xl" />
 
             <div className="flex flex-row">
@@ -34,7 +35,10 @@ function DetailBook() {
               <p>Currently</p>
               <p>not available</p>
             </div>
-            <button className="bg-[#001F8B] text-white px-10 py-2 rounded-xl font-semibold">
+            <button
+              onClick={() => Navigate("/booking/1")}
+              className="bg-[#001F8B] text-white px-10 py-2 rounded-xl font-semibold"
+            >
               Borrow a book
             </button>
 
@@ -45,8 +49,8 @@ function DetailBook() {
             </div>
           </div>
 
-          {/* RIGHT: BOOK INFO */}
-          <div className="flex flex-col gap-5 text-black max-w-xl  ">
+
+          <div className="Right Box flex flex-col gap-5 text-black max-w-xl  ">
             <h1 className="text-2xl md:text-4xl font-bold text-blue-950">
               From The Films Of Harry Potter
             </h1>
