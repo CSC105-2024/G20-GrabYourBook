@@ -1,11 +1,10 @@
 import React from "react";
 import Navbar from "../components/Navbar";
-import pic from "../images/harry.jpg";
+import pic from "../images/womeninme.jpg";
 import { Navigate, useNavigate } from "react-router-dom";
 
 function DetailBook() {
-
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -28,20 +27,19 @@ function DetailBook() {
             <img src={pic} alt="book" className="w-full h-66 rounded-2xl" />
 
             <div className="flex flex-row">
-              <p className="text-yellow-900 font-normal">Remaining 0 opies</p>
+              <p className="text-yellow-900 font-normal">Remaining 1 opies</p>
             </div>
 
-            <div className="text-center text-[#E54545] text-2xl font-semibold leading-tight">
+            <div className="text-center text-[#418C86] text-2xl font-semibold leading-tight">
               <p>Currently</p>
-              <p>not available</p>
+              <p> Available</p>
             </div>
             <button
-              onClick={() => navigate("/booking/1")}
+              onClick={() => navigate("/booking/2")}
               className="bg-[#001F8B] hover:bg-blue-700 text-white px-10 py-2 rounded-xl font-semibold"
             >
               Borrow a book
             </button>
-
             <div className="flex flex-row ">
               <p className="text-xs text-yellow-900 text-center mt-1">
                 Nearest available date : 29/02/2025
@@ -51,7 +49,7 @@ function DetailBook() {
 
           <div className="Right Box flex flex-col gap-5 text-black max-w-xl  ">
             <h1 className="text-2xl md:text-4xl font-bold text-[#061C6A]">
-              From The Films Of Harry Potter
+              THE WOMEN IN ME
             </h1>
             <p>
               <span className="font-bold md:text-2xl">Author :</span>
