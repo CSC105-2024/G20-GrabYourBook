@@ -105,9 +105,11 @@ const ConfirmBooking = () => {
 
       <div className=" flex flex-col justify-center">
         {bookingError && (
-          <div className={`max-w-[800px] max-h-[60px] md:rounded-2xl md:shadow-xl p-3 flex flex-row text-xs md:flex-row  justify-center gap-1 md:gap-5 items-center md:w-[600px] mb-4 w-full bg-white text-black md:text-lg text-bold rounded-xl text-center font-semibold z-30 font-['Poppins'] ${
-            shakeTrigger ? "animate-shake" : "animate-fadeInScale"
-          }`}>
+          <div
+            className={`max-w-[800px] max-h-[60px] md:rounded-2xl md:shadow-xl p-3 flex flex-row text-xs md:flex-row  justify-center gap-1 md:gap-5 items-center md:w-[600px] mb-4 w-full bg-white text-black md:text-lg text-bold rounded-xl text-center font-semibold z-30 font-['Poppins'] ${
+              shakeTrigger ? "animate-shake" : "animate-fadeInScale"
+            }`}
+          >
             <img
               src={confirmErrorIcon}
               alt="error icon"
@@ -163,7 +165,7 @@ const ConfirmBooking = () => {
               <button
                 type="button"
                 onClick={handleBooking}
-                className="self-center mt-2 px-6 py-2 bg-blue-800 text-white font-bold rounded-xl hover:bg-blue-700 transition w-[100px] max-w-[220px] font-['Poppins']"
+                className="self-center mt-2 px-6 py-2 bg-[#001F8B] text-white font-bold rounded-xl hover:bg-blue-700 transition w-[100px] max-w-[220px] font-['Poppins']"
               >
                 Book
               </button>
