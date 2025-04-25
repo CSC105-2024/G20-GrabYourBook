@@ -18,6 +18,7 @@ import DetailAva from "./pages/DetailBookava.jsx";
 import LoginContext from "./context/LoginContext";
 import CancleMyBookPage from "./pages/CancleMyBookPage.jsx";
 import CancleSuccessPage from "./pages/CancleSuccessPage.jsx";
+import Search from "./pages/Search.jsx";
 
 const router = createBrowserRouter([
   {
@@ -79,7 +80,11 @@ const router = createBrowserRouter([
   {
     path: "/canclesuccess",
     element: <CancleSuccessPage />,
-  }
+  },
+  {
+    path: "/search",
+    element: <Search/>,
+  },
 ]);
 
 function RootWithContext() {

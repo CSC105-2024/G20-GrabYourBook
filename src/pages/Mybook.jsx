@@ -121,7 +121,7 @@ const Mybook = () => {
   );
 
   const BookComponent = ({ book }) => (
-    <div className="w-full max-w-[700px] bg-white rounded-2xl shadow-md p-4 sm:p-6 flex flex-col sm:flex-row gap-4 sm:gap-16 items-center">
+    <div className="w-full max-w-[700px] bg-white rounded-2xl shadow-md p-4 sm:p-6 flex flex-col md:flex-row gap-4 sm:gap-16 items-center">
       <div className="w-[120px] h-[170px] sm:w-[100px] sm:h-[150px] md:w-[130px] md:h-[180px] overflow-hidden rounded-xl border border-gray-200 flex-shrink-0">
         <img
           src={book.cover}
