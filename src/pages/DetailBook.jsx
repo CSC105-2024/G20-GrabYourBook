@@ -50,7 +50,7 @@ function DetailBook() {
           </div>
 
           <div className="Right Box flex flex-col gap-5 text-black max-w-xl  ">
-            <h1 className="text-2xl md:text-4xl font-bold text-blue-950">
+            <h1 className="text-2xl md:text-4xl font-bold text-[#061C6A]">
               From The Films Of Harry Potter
             </h1>
             <p>
