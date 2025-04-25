@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
 import Navbar from "../components/Navbar";
 
 const Mybook = () => {
@@ -85,9 +83,6 @@ const Mybook = () => {
       </div>
 
       <div className="flex justify-center items-center">
-        <div className="MiddleContainer gap-8 w-[50%] h-[700px] overflow-y-auto bg-white/45 rounded-2xl flex flex-col items-center py-10 px-4 shadow-xl">
-          {reservedBooks.map((book, i) => (
-            <BookComponent book={book} key={book.id} />
         <div className="MiddleContainer gap-8 w-[50%] h-[700px] overflow-y-auto bg-white/45 rounded-2xl flex flex-col items-center py-10 px-4 shadow-xl">
           {reservedBooks.map((book, i) => (
             <BookComponent book={book} key={book.id} />
