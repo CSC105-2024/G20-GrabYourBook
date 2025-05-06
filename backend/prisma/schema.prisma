@@ -13,3 +13,55 @@ datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
+
+model Users {
+  UserId     Int        @id @default(autoincrement())
+  Username   String
+  Password   String
+  Created_At DateTime   @default(now())
+  Borrowed   Borrowed[]
+}
+
+model Categories {
+  CatagoryId   Int            @id @default(autoincrement())
+  Name         String
+  Created_At   DateTime       @default(now())
+  BookCategory BookCategory[]
+}
+
+model Books {
+  BookId       Int             @id @default(autoincrement())
+  Title        String
+  Author       String
+  Description  String
+  Created_At   DateTime        @default(now())
+  BookCategory BookCategory[]
+  BookInstance BookInstances[]
+}
+
+model BookCategory {
+  BookCategoryId Int        @id @default(autoincrement())
+  BookId         Int
+  CategoryId     Int
+  Created_At     DateTime   @default(now())
+  Book           Books      @relation(fields: [BookId], references: [BookId])
+  Category       Categories @relation(fields: [CategoryId], references: [CatagoryId])
+}
+
+model BookInstances {
+  BookInstanceId Int        @id @default(autoincrement())
+  BookId         Int
+  Created_At     DateTime   @default(now())
+  Book           Books      @relation(fields: [BookId], references: [BookId])
+  Borrowed       Borrowed[]
+}
+
+model Borrowed {
+  BorrowedId     Int           @id @default(autoincrement())
+  UserId         Int
+  BookInstanceId Int
+  IsReturned     Boolean
+  Created_At     DateTime      @default(now())
+  User           Users         @relation(fields: [UserId], references: [UserId])
+  BookInstance   BookInstances @relation(fields: [BookInstanceId], references: [BookInstanceId])
+}
