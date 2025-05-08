@@ -1,34 +1,15 @@
-// import { Hono } from "hono";
-// import { db } from "../index.ts";
+import { db } from '../index.ts';
 
-// export const getDetailBook = async (id: number) => {
-//   const books = await db.books.findUnique({
-//     where: {
-//       BookId: id,
-//     },
-//   });
+export const getBooks = async() => {
+    const bookDetails = await db.books.findMany();
+    return bookDetails;
+}
 
-//   return books;
-// };
-
-// export const getAllDetailBook = async () => {
-//   const data = await db.books.findMany();
-//   return data;
-// };
-
-import { db } from "../index.ts";
-
-export const getDetailBook = async (id: number) => {
-  const book = await db.books.findUnique({
-    where: {
-      BookId: id,
-    },
-  });
-
-  return book;
-};
-
-export const getAllDetailBook = async () => {
-  const books = await db.books.findMany();
-  return books;
-};
+export const getBooksById = async(id: number) => {
+    const bookDetailsById = await db.books.findUnique({
+        where: {
+            BookId: id,
+        }
+    })
+    return bookDetailsById;
+}
