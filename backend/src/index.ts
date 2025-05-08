@@ -1,6 +1,7 @@
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
 import { PrismaClient } from "./generated/prisma/index.js";
+import { booksRoutes } from './routes/books.routes.ts';
 
 const app = new Hono();
 
@@ -13,6 +14,8 @@ db.$connect().catch((e) => {
 app.get("/", (c) => {
   return c.text("Hello Hono!");
 });
+
+app.route('/books', booksRoutes)
 
 serve(
   {
