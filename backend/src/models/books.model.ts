@@ -37,6 +37,44 @@ export const getDetailBook = async (id: number) => {
   };
 };
 
+export const getNextAvailableDate = async (bookId: number) => {
+  const instances = await db.bookInstances.findMany({
+    where: { BookId: bookId },
+    select: { BookInstanceId: true },
+  });
+
+  const instanceIds = instances.map((i) => i.BookInstanceId);
+
+  if (instanceIds.length === 0) return null;
+
+  const borrowed = await db.borrowed.findMany({
+    where: {
+      IsReturned: false,
+      BookInstanceId: {
+        in: instanceIds,
+      },
+    },
+    select: {
+      Created_At: true,
+    },
+  });
+
+  if (borrowed.length === 0) return null;
+
+  const dueDates = borrowed.map((b) => {
+    const due = new Date(b.Created_At);
+    due.setDate(due.getDate() + 5);
+    return due;
+  });
+
+  const soonest = dueDates.sort((a, b) => a.getTime() - b.getTime())[0];
+  const day = soonest.getDate().toString().padStart(2, "0");
+  const month = (soonest.getMonth() + 1).toString().padStart(2, "0");
+  const year = soonest.getFullYear();
+
+  return `${day}/${month}/${year}`;
+};
+
 export const getAllDetailBook = async () => {
   const books = await db.books.findMany();
   return books;
