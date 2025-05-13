@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { z } from "zod";
+import { Link, useNavigate } from "react-router-dom";
 import errorIcons from "../icons/errorIcons.svg";
 import successfullyIcon from "../icons/successfullyIcons.svg";
-import { Link, useNavigate } from "react-router-dom";
+import { registerUser } from "../api/register"; // เชื่อม backend ที่นี่
 
 const registerSchema = z
   .object({
@@ -54,7 +55,7 @@ const Register = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const isUsernameEmpty = !formData.username.trim();
@@ -85,8 +86,23 @@ const Register = () => {
     const result = registerSchema.safeParse(formData);
 
     if (result.success) {
-      setRegisterStatus("success");
-      setErrors({});
+      try {
+        const res = await registerUser(formData.username, formData.password);
+
+        if (res.success) {
+          setRegisterStatus("success");
+          setErrors({});
+        } else {
+          setRegisterStatus("error");
+          setErrors({ username: res.msg || "Username already taken" });
+          triggerShake();
+        }
+      } catch (err) {
+        console.error("Register error:", err);
+        setRegisterStatus("error");
+        setErrors({ username: "Server error. Please try again." });
+        triggerShake();
+      }
     } else {
       const newErrors = {};
       result.error.errors.forEach((error) => {
@@ -99,10 +115,7 @@ const Register = () => {
   };
 
   return (
-    <div className="w-full h-screen bg-neutral-200 overflow-hidden relative flex justify-center items-center">
-      <div className="absolute w-[3000px] h-[1500px] bg-indigo-300 rounded-full blur-[150px] left-[60%] top-[-30%]" />
-      <div className="absolute w-[1000px] h-[600px] bg-blue-500 rounded-full blur-[250px] left-[65%] top-[10%]" />
-
+    <div className="w-full h-screen bg-neutral-200 flex justify-center items-center">
       <div className="z-10 flex flex-col items-center w-full max-w-md px-4">
         {registerStatus && (
           <div
@@ -117,7 +130,9 @@ const Register = () => {
             <div className="w-full flex items-center justify-center gap-2 text-center py-2 px-4 rounded-xl text-black bg-white font-bold shadow-md">
               <img
                 src={
-                  registerStatus === "success" ? successfullyIcon : errorIcons
+                  registerStatus === "success"
+                    ? successfullyIcon
+                    : errorIcons
                 }
                 alt="status icon"
                 className="w-6 h-6"
