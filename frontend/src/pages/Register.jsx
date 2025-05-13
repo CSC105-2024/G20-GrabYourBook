@@ -3,6 +3,7 @@ import { z } from "zod";
 import errorIcons from "../icons/errorIcons.svg";
 import successfullyIcon from "../icons/successfullyIcons.svg";
 import { Link, useNavigate } from "react-router-dom";
+import { registerUser } from "../api/register";
 
 const registerSchema = z
   .object({
@@ -54,7 +55,7 @@ const Register = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const isUsernameEmpty = !formData.username.trim();
@@ -85,8 +86,18 @@ const Register = () => {
     const result = registerSchema.safeParse(formData);
 
     if (result.success) {
-      setRegisterStatus("success");
-      setErrors({});
+      const res = await registerUser({
+        username: formData.username,
+        password: formData.password,
+      });
+      if (res.success) {
+        setRegisterStatus("success");
+        setErrors({});
+      } else {
+        setRegisterStatus("error");
+        setErrors({ username: res.msg });
+        triggerShake();
+      }
     } else {
       const newErrors = {};
       result.error.errors.forEach((error) => {
