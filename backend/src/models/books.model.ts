@@ -25,6 +25,7 @@ export const getDetailBook = async (id: number) => {
     instance.Borrowed.every((b) => b.IsReturned == true)
   ).length;
   const categories = book.BookCategory.map((bc) => bc.Category.Name);
+  const nextAvailableDate = await getNextAvailableDate(id);
 
   return {
     BookId: book.BookId,
@@ -34,6 +35,7 @@ export const getDetailBook = async (id: number) => {
     totalCopies,
     availableCopies,
     categories,
+    nextAvailableDate,
   };
 };
 
