@@ -5,6 +5,7 @@ import { PrismaClient } from "./generated/prisma/index.js";
 import { mainRouter } from "./routes/index.route.ts";
 import cron from 'node-cron'
 import { autoReturn } from './models/borrow.model.ts'
+import { cors } from 'hono/cors';
 
 const app = new Hono();
 
@@ -13,6 +14,12 @@ export const db = new PrismaClient();
 db.$connect().catch((e) => {
   throw new Error(`Database Connection Error ${e}`);
 });
+
+app.use(
+	cors({
+		origin: ['http://localhost:5173'],
+	})
+);
 
 app.get("/", (c) => {
   return c.text("Hello Hono!");
