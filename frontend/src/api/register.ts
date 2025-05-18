@@ -1,31 +1,18 @@
-import { Axios } from '../utils/axiosInstance';
-
-type RegisterResponse = {
-  success: boolean;
-  data: string | null;
-};
+import { Axios } from "../utils/axiosInstance";
+import { RegisterRequest, RegisterResponse } from "../types/user";
 
 export const registerUser = async (
-  username: string,
-  password: string
+  payload: RegisterRequest
 ): Promise<RegisterResponse> => {
   try {
-    const response = await Axios.post<{ msg: string }>('/user/register', {
-      username,
-      password,
-    });
-
-    return {
-      success: true,
-      data: response.data.msg || 'Registered successfully',
-    };
-  } catch (e: any) {
-    console.error('Register error:', e);
-    const message =
-      e?.response?.data?.msg || 'Server error. Please try again.';
+    const res = await Axios.post("/user/register", payload);
+    return res.data;
+  } catch (error) {
+    console.error("Register API error:", error);
     return {
       success: false,
-      data: message,
+      data: null,
+      msg: "Cannot connect to server",
     };
   }
 };

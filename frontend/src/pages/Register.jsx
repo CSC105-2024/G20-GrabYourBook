@@ -3,7 +3,8 @@ import { z } from "zod";
 import { Link, useNavigate } from "react-router-dom";
 import errorIcons from "../icons/errorIcons.svg";
 import successfullyIcon from "../icons/successfullyIcons.svg";
-import { registerUser } from "../api/register"; // เชื่อม backend ที่นี่
+import { Link, useNavigate } from "react-router-dom";
+import { registerUser } from "../api/register";
 
 const registerSchema = z
   .object({
@@ -86,21 +87,16 @@ const Register = () => {
     const result = registerSchema.safeParse(formData);
 
     if (result.success) {
-      try {
-        const res = await registerUser(formData.username, formData.password);
-
-        if (res.success) {
-          setRegisterStatus("success");
-          setErrors({});
-        } else {
-          setRegisterStatus("error");
-          setErrors({ username: res.msg || "Username already taken" });
-          triggerShake();
-        }
-      } catch (err) {
-        console.error("Register error:", err);
+      const res = await registerUser({
+        username: formData.username,
+        password: formData.password,
+      });
+      if (res.success) {
+        setRegisterStatus("success");
+        setErrors({});
+      } else {
         setRegisterStatus("error");
-        setErrors({ username: "Server error. Please try again." });
+        setErrors({ username: res.msg });
         triggerShake();
       }
     } else {
