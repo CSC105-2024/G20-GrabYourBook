@@ -1,89 +1,97 @@
 import { db } from "../index.ts";
 
-export const createBorrow = async (userId: number, bookInstanceId: number) => {
+export const createBorrow = async (userId: number, bookInstanceId: number, createdAt: Date) => {
     return db.borrowed.create({
         data: {
             UserId: userId,
             BookInstanceId: bookInstanceId,
-            IsReturned: false
-        }
-    })
-}
+            IsReturned: false,
+            Created_At: createdAt,
+        },
+    });
+};
 
-export const isBookFullyBorrowed = async (bookId: number) => {
+export const isBookFullyBorrowedOnDate = async (bookId: number, date: Date) => {
     const allInstances = await db.bookInstances.findMany({
         where: {
             BookId: bookId
-        },
-        select: {
+        }, select: {
             BookInstanceId: true
-        }
-    })
+        },
+    });
 
-    const borrowedInstances = await db.borrowed.findMany({
+    const instanceIds = allInstances.map((i) => i.BookInstanceId);
+
+    const borrowedOnDate = await db.borrowed.findMany({
         where: {
             BookInstanceId: {
-                in: allInstances.map(b => b.BookInstanceId)
-            },
-            IsReturned: false
+                in: instanceIds
+            }, IsReturned: false,
+            Created_At: date,
         },
-        select: {
-            BookInstanceId: true
-        }
-    })
+    });
 
-    return allInstances.length - borrowedInstances.length <= 0
-}
+    return borrowedOnDate.length >= allInstances.length;
+};
 
-export const getAvailableInstance = async (bookId: number) => {
+export const getAvailableInstanceOnDate = async (bookId: number, date: Date) => {
     const instances = await db.bookInstances.findMany({
         where: {
             BookId: bookId
-        },
-        include: {
+        }, include: {
             Borrowed: true
-        }
-    })
+        },
+    });
 
-    return instances.find(instance =>
-        !instance.Borrowed.some(b => !b.IsReturned)
-    )
-}
+    return instances.find((instance) =>
+        !instance.Borrowed.some(
+            (b) => !b.IsReturned && sameDay(b.Created_At, date)
+        )
+    );
+};
 
 export const autoReturn = async () => {
-    const fiveDays = new Date()
-    fiveDays.setDate(fiveDays.getDate() - 5)
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const fiveDaysAgo = new Date(today);
+    fiveDaysAgo.setDate(fiveDaysAgo.getDate() - 5);
 
     const result = await db.borrowed.updateMany({
         where: {
             IsReturned: false,
             Created_At: {
-                lt: fiveDays
-            }
+                lte: fiveDaysAgo,
+            },
         },
         data: {
-            IsReturned: true
-        }
-    })
-
-    return result
-}
-
-export const getBorrowedById = async(borrowedId: number) => {
-    const borrow = db.borrowed.findUnique({
-        where: {
-            BorrowedId: borrowedId,
+            IsReturned: true,
         },
     });
-    return borrow;
-}
 
-export const deleteBorrowedById = async(borrowedId: number) => {
-    const borrow = db.borrowed.delete({
+    return result;
+};
+
+const sameDay = (a: Date, b: Date) => {
+    return (
+        a.getFullYear() === b.getFullYear() &&
+        a.getMonth() === b.getMonth() &&
+        a.getDate() === b.getDate()
+    );
+};
+
+export const getBorrowedById = async (borrowedId: number) => {
+    return db.borrowed.findUnique({
         where: {
             BorrowedId: borrowedId
         },
     });
-    return borrow;
-}
-  
+};
+
+export const deleteBorrowedById = async (borrowedId: number) => {
+    return db.borrowed.delete({
+        where: {
+            BorrowedId: borrowedId
+        },
+    });
+};

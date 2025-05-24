@@ -1,162 +1,235 @@
-import type { Context } from 'hono'
-import * as borrowedModel from '../models/borrow.model.ts'
+import type { Context } from 'hono';
+import * as borrowedModel from '../models/borrow.model.ts';
 
 type BorrowBody = {
-    userId: number
-    bookId: number
-}
+    bookId: number;
+    reserveDate: string;
+};
 
 export const createBorrowed = async (c: Context) => {
     try {
-        const body = await c.req.json<BorrowBody>()
+        const userId = c.get("userId");
+        const { bookId, reserveDate } = await c.req.json<BorrowBody>();
 
-        if (!body.userId || !body.bookId) {
-            return c.json(
-                {
-                    success: false,
-                    bodo: null,
-                    msg: 'Missing required fields'
-                },
-                400
-            )
-        }
-
-        const isFullyBorrowed = await borrowedModel.isBookFullyBorrowed(body.bookId)
-        if (isFullyBorrowed) {
+        if (!bookId || !reserveDate) {
             return c.json(
                 {
                     success: false,
                     data: null,
-                    msg: 'No available copies for this book'
+                    msg: "Missing required fields"
                 },
                 400
             )
         }
 
-        const availableInstance = await borrowedModel.getAvailableInstance(body.bookId)
-        if (!availableInstance) {
+        const reserve = new Date(reserveDate);
+        reserve.setHours(0, 0, 0, 0);
+
+        const isFull = await borrowedModel.isBookFullyBorrowedOnDate(bookId, reserve);
+
+        if (isFull) {
             return c.json(
                 {
                     success: false,
                     data: null,
-                    msg: 'No available instance found'
+                    msg: "Unavailable on that day"
                 },
                 400
             )
         }
 
-        const record = await borrowedModel.createBorrow(body.userId, availableInstance.BookInstanceId)
-        const dueDate = new Date(record.Created_At)
-        dueDate.setDate(dueDate.getDate() + 5)
+        const instance = await borrowedModel.getAvailableInstanceOnDate(bookId, reserve);
+
+        if (!instance) {
+            return c.json(
+                {
+                    success: false,
+                    data: null,
+                    msg: "No instance available"
+                },
+                400
+            )
+        }
+
+        const record = await borrowedModel.createBorrow(userId, instance.BookInstanceId, reserve);
+
+        const dueDate = new Date(reserve);
+        dueDate.setDate(dueDate.getDate() + 5);
+
         return c.json({
             success: true,
             data: {
                 ...record,
-                BookInstanceId: availableInstance.BookInstanceId,
-                DueDate: dueDate
+                BookInstanceId: instance.BookInstanceId,
+                ReserveDate: reserve,
+                DueDate: dueDate,
             },
-            msg: 'Borrowed successfully',
-        },
-            200
-        )
+            msg: "Reservation created successfully",
+        }, 200);
 
     } catch (e) {
         return c.json(
             {
                 success: false,
                 data: null,
-                msg: `${e}`
+                msg: `${e}`,
             },
             500
         )
     }
-}
+};
 
 export const autoReturnBook = async (c: Context) => {
     try {
         const result = await borrowedModel.autoReturn();
+
         return c.json({
             success: true,
             data: result.count,
-            msg: `Auto-returned ${result.count} book(s) that passed 5 days.`
-        })
+            msg: `Auto-returned ${result.count} book(s).`,
+        },
+            200
+        );
+
     } catch (e) {
+
         return c.json(
             {
                 success: false,
                 data: null,
-                msg: `${e}`
-            },
-            500
+                msg: `${e}`,
+            }
         )
     }
-}
+};
 
-
-export const getBorrowedById = async (c: Context) => {
+export const checkAvailability = async (c: Context) => {
     try {
-        const param = c.req.query("id");
-        if (!param) {
+        const bookId = Number(c.req.query("bookId"));
+        const dateStr = c.req.query("date");
+
+        if (!bookId || !dateStr) {
             return c.json(
                 {
                     success: false,
                     data: null,
-                    msg: "Missing required fields"
+                    msg: "Missing book Id or Date"
                 },
                 400
             )
         }
-        const data = await borrowedModel.getBorrowedById(parseInt(param));
-        return c.json(
-            {
-                success: true,
-                data: data,
-            },
+
+        const date = new Date(dateStr);
+        date.setHours(0, 0, 0, 0);
+
+        const isFull = await borrowedModel.isBookFullyBorrowedOnDate(bookId, date);
+
+        return c.json({
+            success: true,
+            available: !isFull,
+            status: isFull ? "Unavailable" : "Available",
+        },
             200
-        )
+        );
+
     } catch (e) {
         return c.json(
             {
                 success: false,
                 data: null,
                 msg: `${e}`,
-            },
-            500
-        );
+            }
+        )
     }
-}
+};
 
 export const deleteBorrowedById = async (c: Context) => {
     try {
-        const param = c.req.query("id");
-        if (!param) {
+        const userId = c.get("userId");
+        const idStr = c.req.query("id");
+
+        if (!idStr) {
             return c.json(
                 {
                     success: false,
                     data: null,
-                    msg: "Missing required fields"
+                    msg: "Missing Borrowed Id"
                 },
                 400
             )
         }
 
-        const data = await borrowedModel.deleteBorrowedById(parseInt(param));
-        return c.json(
-            {
-                success: true,
-                data: data,
-                msg: "Delete Successful!!!"
-            },
-            200
-        )
-    } catch (e) {
-        return c.json(
-            {
+        const borrowedId = parseInt(idStr);
+        const borrow = await borrowedModel.getBorrowedById(borrowedId);
+
+        if (!borrow) {
+            return c.json(
+                {
+                    success: false,
+                    data: null,
+                    msg: "Reservation not found"
+                },
+                404
+            );
+        }
+
+        if (borrow.UserId !== userId) {
+            return c.json({
                 success: false,
                 data: null,
-                msg: `${e}`,
+                msg: "You are not authorized to delete this reservation"
             },
+                403
+            );
+        }
+
+        await borrowedModel.deleteBorrowedById(borrowedId);
+
+        return c.json({
+            success: true,
+            msg: "Deleted successfully"
+        },
+            200
+        );
+    } catch (e) {
+        return c.json({
+            success: false,
+            data: null,
+            msg: `${e}`
+        },
             500
         );
     }
-}
+};
+
+export const getBorrowedById = async (c: Context) => {
+    try {
+        const id = c.req.query("id");
+        if (!id) {
+            return c.json(
+                {
+                    success: false,
+                    data: null,
+                    msg: "Missing ID"
+                },
+                400
+            );
+        }
+
+        const data = await borrowedModel.getBorrowedById(parseInt(id));
+        return c.json({
+            success: true,
+            data: data,
+        },
+            200
+        );
+    } catch (e) {
+        return c.json({
+            success: false,
+            data: null,
+            msg: `${e}`
+        },
+            500
+        );
+    }
+};
