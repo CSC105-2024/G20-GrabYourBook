@@ -4,6 +4,7 @@ import { GoChevronDown, GoChevronUp, GoPersonFill } from "react-icons/go";
 import { HiMenuAlt3 } from "react-icons/hi";
 import Logo from "../images/logo.jpg";
 import LoginContext from "../context/LoginContext";
+import { logoutUser } from "../api/logout";
 
 function Navbar() {
   const [dropdownCategoryOpen, setDropdownCategoryOpen] = useState(false);
@@ -12,10 +13,17 @@ function Navbar() {
   const { isLogin, setIsLogin } = useContext(LoginContext);
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    setIsLogin(false);
-    navigate("/");
-  };
+  const handleLogout = async() => {
+    const res = await logoutUser();
+
+    if(res.success) {
+      console.log("Logout Success: ", res.msg);
+      setIsLogin(false);
+      navigate("/login");
+    } else {
+      console.log("Logout failed: ", res.msg);
+    }
+  }
 
   return (
     <nav className="flex justify-between p-5 w-full h-16 items-center shadow-md bg-gray-50 z-[9999] relative">

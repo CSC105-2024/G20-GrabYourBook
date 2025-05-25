@@ -28,3 +28,12 @@ export const getUserById = async (id: number) => {
     });
     return user;
 }
+
+export const getUserByUsername = async(username: string) => {
+    const user = await db.users.findFirst({
+        where: {
+            Username: username,
+        },
+    });
+    return user;
+}

@@ -20,6 +20,7 @@ import CancleSuccessPage from "./pages/CancleSuccessPage.jsx";
 import Search from "./pages/Search.jsx";
 import DetailBook from "./pages/DetailBook.jsx";
 import DetailBookAva from "./pages/DetailBookAva.jsx"
+import ErrorPage from "./pages/Error.jsx";
 
 const router = createBrowserRouter([
   {
@@ -90,6 +91,10 @@ const router = createBrowserRouter([
     path: "/detailbookava",
     element: <DetailBookAva/>,
   },
+  {
+    path: "*",
+    element: <ErrorPage/>,
+  }
 ]);
 
 function RootWithContext() {
