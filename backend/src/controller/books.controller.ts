@@ -78,3 +78,38 @@ export const getAllDetailBook = async (c: Context) => {
     );
   }
 };
+
+export const getBookByName = async(c: Context) => {
+    try {
+        const query = c.req.query("name");
+
+        if(!query || query.trim() === "") {
+            return c.json(
+                {
+                    success: false,
+                    data: null,
+                    msg: "Missing name of Book",
+                },
+                400
+            );
+        }
+
+        const data = await booksModel.getBookByName(query);
+        return c.json(
+            {
+                success: true,
+                data: data,
+            },
+            200
+        );
+    } catch(e) {
+        return c.json(
+            {
+                success: false,
+                data: e,
+                msg: "Internal Server Error"
+            },
+            500
+        );
+    }
+};

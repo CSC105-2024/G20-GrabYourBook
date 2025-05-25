@@ -4,14 +4,12 @@ import errorIcons from "../icons/errorIcons.svg";
 import successfullyIcon from "../icons/successfullyIcons.svg";
 import { Link, useNavigate } from "react-router-dom";
 import LoginContext from "../context/LoginContext";
+import { loginUser } from "../api/login";
 
 const userSchema = z.object({
   username: z.string().min(1, "Username is required"),
   password: z.string().min(1, "Password is required"),
 });
-
-const correctUsername = "user12345";
-const correctPassword = "password123";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -48,36 +46,37 @@ const Login = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const result = userSchema.safeParse(formData);
-
-    if (!formData.username.trim() && !formData.password.trim()) {
+  
+    if (!formData.username.trim() || !formData.password.trim()) {
       setLoginStatus("empty");
       triggerShake();
       return;
     }
-
-    if (result.success) {
-      if (
-        formData.username === correctUsername &&
-        formData.password === correctPassword
-      ) {
-        setLoginStatus("success");
-      } else {
-        setLoginStatus("error");
-        triggerShake();
-      }
-    } else {
+  
+    if (!result.success) {
       const newErrors = {};
       result.error.errors.forEach((error) => {
         newErrors[error.path[0]] = error.message;
       });
       setErrors(newErrors);
-      setLoginStatus("");
+      return;
+    }
+  
+    const response = await loginUser(formData);
+  
+    if (response.success) {
+      console.log("Login success", response);
+      setLoginStatus("success");
+    } else {
+      console.log("Login failed", response);
+      setLoginStatus("error");
+      triggerShake();
     }
   };
-
+  
   return (
     <div className="w-full h-screen bg-neutral-200 overflow-hidden relative flex justify-center items-center">
       <div className="absolute w-[3000px] h-[1500px] bg-indigo-300 rounded-full blur-[150px] left-[60%] top-[-30%]" />

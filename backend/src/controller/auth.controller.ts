@@ -3,6 +3,7 @@ import * as userModel from '../models/user.model.ts';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'hono/jwt';
 import { setCookie } from "hono/cookie";
+import { deleteCookie } from "hono/cookie";
 
 type RegisterPayload = {
     username: string;
@@ -49,7 +50,7 @@ export const Register = async (c: Context) => {
             data: { id: newUser.UserId },
             msg: "Register successful!!!!"
         },
-            400)
+            201)
     } catch (e) {
         return c.json(
             {
@@ -115,7 +116,13 @@ export const Login = async (c: Context) => {
 
         const token = await jwt.sign(jwtPayload, SECRET);
 
-        setCookie(c, "authToken", token);
+        setCookie(c, "authToken", token, {
+            path: "/",
+            httpOnly: true,
+            secure: false,
+            sameSite: "Lax",
+            maxAge: 60 * 60 * 24,
+        });
 
         return c.json(
             {
@@ -137,3 +144,30 @@ export const Login = async (c: Context) => {
         )
     }
 }
+
+export const Logout = async(c: Context) => {
+    try {
+        deleteCookie(c, "authToken" , {
+            path: "/",
+            httpOnly: true,
+            secure: false,
+        });
+
+        return c.json(
+            {
+                success: true,
+                msg: "Logout Successful!",
+            },
+            200
+        );
+    } catch(e) {
+        return c.json(
+            {
+                success: false,
+                data: e,
+                msg: "Logout failed!!",
+            },
+            500
+        );
+    }
+};

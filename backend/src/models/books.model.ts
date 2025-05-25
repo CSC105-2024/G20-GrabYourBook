@@ -36,6 +36,7 @@ export const getDetailBook = async (id: number) => {
         availableCopies,
         categories,
         nextAvailableDate,
+        coverUrl:  book.CoverUrl,
     };
 };
 
@@ -90,3 +91,22 @@ export const deleteBookById = async (id: number) => {
     });
     return bookDetailsById;
 };
+
+export const getBookByName = async(name: string) => {
+    const getBookByName = await db.books.findMany({
+        where: {
+            Title: {
+                contains: name,
+                mode: "insensitive",
+            },
+        },
+        select: {
+            BookId: true,
+            Title: true,
+            Author: true,
+            CoverUrl: true,
+        }
+    })
+
+    return getBookByName;
+}
