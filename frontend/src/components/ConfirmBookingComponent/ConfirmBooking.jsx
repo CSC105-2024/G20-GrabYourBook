@@ -128,12 +128,8 @@ const handleBooking = async () => {
               shakeTrigger ? "animate-shake" : "animate-fadeInScale"
             }`}
           >
-            <img
-              src={confirmErrorIcon}
-              alt="error icon"
-              className="w-5 h-5 md:w-10 md:h-10 mb-2 mt-1"
-            />
-            <span>{bookingError}</span>
+            
+            
           </div>
         )}
 

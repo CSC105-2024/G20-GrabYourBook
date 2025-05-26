@@ -236,8 +236,7 @@ export const getBorrowedById = async (c: Context) => {
 
 export const getBorrowedByUserId = async(c: Context) => {
     try{
-        const user = c.get("user");
-        const userId = user.id as number;
+        const userId = c.get("userId")as number;
 
         if(!userId) {
             return c.json(
@@ -263,7 +262,41 @@ export const getBorrowedByUserId = async(c: Context) => {
             {
                 success: false,
                 data: e,
-                msg: "Internal Sever Error",
+                msg: "Internal Server Error",
+            },
+            500
+        )
+    }
+}
+
+export const returnBook = async (c: Context) => {
+    try {
+        const borrowedId = c.req.query("borrowedId");
+        if (!borrowedId){
+            return c.json(
+                {
+                    success: false,
+                    data: null,
+                    msg: "Missing reqiured fields",
+                },
+                400
+            )
+        }
+        const data = await borrowedModel.returnBook(parseInt(borrowedId));
+        return c.json(
+            {
+                success: true,
+                data: data,
+            },
+            200
+        )
+
+    } catch (e) {
+        return c.json(
+            {
+                success: false,
+                data: e,
+                msg: "Internal Server Error",
             },
             500
         )

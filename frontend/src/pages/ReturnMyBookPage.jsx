@@ -5,26 +5,27 @@ import xIcon from "../icons/xIcon.svg";
 import Navbar from "../components/Navbar";
 import { Axios } from "../utils/axiosInstance";
 
-const CancleMyBookPage = () => {
+const ReturnMyBookPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { BorrowedId, books } = location.state;
-
   const handleYes = async () => {
     try {
-      const res = await Axios.delete(`/borrow/delete?id=${BorrowedId}`);
+      const res = await Axios.put(`/borrow/return?borrowedId=${BorrowedId}`);
+
       if (res.data.success) {
         const updatedBooks = books.filter(
           (book) => book.BorrowedId !== BorrowedId
         );
         localStorage.setItem("reservedBooks", JSON.stringify(updatedBooks));
-        navigate("/canclesuccess", { state: { books: updatedBooks } });
+
+        navigate("/returnsuccess", { state: { books: updatedBooks } });
       } else {
-        alert("Failed to cancel reservation.");
+        alert("Failed to return book.");
       }
     } catch (e) {
-      console.error("Cancel error:", e);
-      alert("Error occurred during cancellation.");
+      console.error("Return error:", e);
+      alert("Error occurred during return.");
     }
   };
 
@@ -52,7 +53,7 @@ const CancleMyBookPage = () => {
           <div className="flex flex-col justify-center items-center flex-grow gap-5">
             <img src={warning} alt="warning" className="w-12 h-12 mb-4" />
             <h2 className="text-xl font-bold mb-6 text-black font-['Poppins']">
-              Are you sure you want to cancel?
+              Are you sure you want to return?
             </h2>
             <div className="grid grid-cols-2 gap-8 justify-center items-center">
               <button
@@ -75,4 +76,4 @@ const CancleMyBookPage = () => {
   );
 };
 
-export default CancleMyBookPage;
+export default ReturnMyBookPage;

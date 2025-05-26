@@ -100,6 +100,7 @@ export const getBorrowedByUserId = async (userId: number) => {
     const borrowed = await db.borrowed.findMany({
       where: {
         UserId: userId,
+        IsReturned: false
       },
       include: {
         BookInstance: {
@@ -122,13 +123,6 @@ export const getBorrowedByUserId = async (userId: number) => {
     return borrowed.map((entry) => {
       const due = new Date(entry.Created_At);
       due.setDate(due.getDate() + 5);
-
-      const formatDate = (d: Date) => {
-        const day = d.getDate().toString().padStart(2, "0");
-        const month = (d.getMonth() + 1).toString().padStart(2, "0");
-        const year = d.getFullYear();
-        return `${day}/${month}/${year}`;
-      };
   
       return {
         BorrowedId: entry.BorrowedId,
@@ -138,7 +132,18 @@ export const getBorrowedByUserId = async (userId: number) => {
         CoverUrl: entry.BookInstance.Book.CoverUrl,
         IsReturned: entry.IsReturned,
         Created_At: entry.Created_At,
-        DueDate: formatDate(due),
+        DueDate: due.toISOString(),
       };
     });
   };
+
+export const returnBook = async (borrowedId: number) => {
+    const book = await db.borrowed.update({
+        where: {
+            BorrowedId: borrowedId
+        }, data : {
+            IsReturned: true,
+        }
+    })
+    return book;
+}

@@ -10,5 +10,4 @@ borrowRouter.get("/borrow", AuthMiddleware, borrowController.getBorrowedById);
 borrowRouter.get("/borrow/auto-return", borrowController.autoReturnBook);
 borrowRouter.get("/isAvailable", borrowController.checkAvailability);
 borrowRouter.get("/mybook", AuthMiddleware, borrowController.getBorrowedByUserId);
-
-
+borrowRouter.put("/return", AuthMiddleware, borrowController.returnBook);

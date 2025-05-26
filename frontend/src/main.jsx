@@ -12,16 +12,18 @@ import { StrictMode, useState, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Booking from './pages/Booking.jsx'
-import BookingSuccessPage from './pages/ConfirmBookingPage.jsx'
+import Booking from "./pages/Booking.jsx";
+import BookingSuccessPage from "./pages/ConfirmBookingPage.jsx";
 import LoginContext from "./context/LoginContext";
 import CancleMyBookPage from "./pages/CancleMyBookPage.jsx";
 import CancleSuccessPage from "./pages/CancleSuccessPage.jsx";
 import Search from "./pages/Search.jsx";
 import DetailBook from "./pages/DetailBook.jsx";
-import DetailBookAva from "./pages/DetailBookAva.jsx"
+import DetailBookAva from "./pages/DetailBookAva.jsx";
 import ErrorPage from "./pages/Error.jsx";
 import SearchResult from "./pages/Search.jsx";
+import ReturnMyBookPage from "./pages/ReturnMyBookPage.jsx";
+import ReturnSuccessPage from "./pages/ReturnSuccessPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -67,6 +69,7 @@ const router = createBrowserRouter([
   {
     path: "/booking/:id",
     element: <Booking />,
+    element: <Booking />,
   },
   {
     path: "/borrow/booking-success/:id",
@@ -99,6 +102,14 @@ const router = createBrowserRouter([
   {
     path: "/searchresult",
     element: <SearchResult />,
+  },
+  {
+    path: "/returnwarning",
+    element: <ReturnMyBookPage />,
+  },
+  {
+    path: "/returnsuccess",
+    element: <ReturnSuccessPage />,
   },
 ]);
 
