@@ -122,13 +122,6 @@ export const getBorrowedByUserId = async (userId: number) => {
     return borrowed.map((entry) => {
       const due = new Date(entry.Created_At);
       due.setDate(due.getDate() + 5);
-
-      const formatDate = (d: Date) => {
-        const day = d.getDate().toString().padStart(2, "0");
-        const month = (d.getMonth() + 1).toString().padStart(2, "0");
-        const year = d.getFullYear();
-        return `${day}/${month}/${year}`;
-      };
   
       return {
         BorrowedId: entry.BorrowedId,
@@ -138,7 +131,7 @@ export const getBorrowedByUserId = async (userId: number) => {
         CoverUrl: entry.BookInstance.Book.CoverUrl,
         IsReturned: entry.IsReturned,
         Created_At: entry.Created_At,
-        DueDate: formatDate(due),
+        DueDate: due.toISOString(),
       };
     });
   };

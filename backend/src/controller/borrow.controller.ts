@@ -236,8 +236,7 @@ export const getBorrowedById = async (c: Context) => {
 
 export const getBorrowedByUserId = async(c: Context) => {
     try{
-        const user = c.get("user");
-        const userId = user.id as number;
+        const userId = c.get("userId")as number;
 
         if(!userId) {
             return c.json(

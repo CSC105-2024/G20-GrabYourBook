@@ -120,7 +120,7 @@ export const Login = async (c: Context) => {
             path: "/",
             httpOnly: true,
             secure: false,
-            sameSite: "Lax",
+            sameSite: "Strict",
             maxAge: 60 * 60 * 24,
         });
 

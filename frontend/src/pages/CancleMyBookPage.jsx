@@ -3,16 +3,29 @@ import { useNavigate, useLocation } from "react-router-dom";
 import warning from "../icons/warning.svg";
 import xIcon from "../icons/xIcon.svg";
 import Navbar from "../components/Navbar";
+import { Axios } from "../utils/axiosInstance";
 
 const CancleMyBookPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { bookingId, books } = location.state;
+  const { BorrowedId, books } = location.state;
 
-  const handleYes = () => {
-    const updatedBooks = books.filter((book) => book.bookingId !== bookingId);
-    localStorage.setItem("reservedBooks", JSON.stringify(updatedBooks));
-    navigate("/canclesuccess", { state: { books: updatedBooks } });
+  const handleYes = async () => {
+    try {
+      const res = await Axios.delete(`/borrow/delete?id=${BorrowedId}`);
+      if (res.data.success) {
+        const updatedBooks = books.filter(
+          (book) => book.BorrowedId !== BorrowedId
+        );
+        localStorage.setItem("reservedBooks", JSON.stringify(updatedBooks));
+        navigate("/canclesuccess", { state: { books: updatedBooks } });
+      } else {
+        alert("Failed to cancel reservation.");
+      }
+    } catch (e) {
+      console.error("Cancel error:", e);
+      alert("Error occurred during cancellation.");
+    }
   };
 
   return (
