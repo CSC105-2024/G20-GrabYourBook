@@ -113,3 +113,49 @@ export const getBookByName = async(c: Context) => {
         );
     }
 };
+export const getBookById = async (c: Context) => {
+  const id = Number(c.req.param("id"));
+
+  try {
+    const book = await db.books.findUnique({
+      where: { BookId: id },
+      include: {
+        BookInstance: {
+          include: { Borrowed: true },
+        },
+        BookCategory: {
+          include: { Category: true },
+        },
+      },
+    });
+
+    if (!book) {
+      return c.json({ success: false, msg: "Book not found" }, 404);
+    }
+
+    const totalCopies = book.BookInstance.length;
+    const borrowedCount = book.BookInstance.filter((instance) =>
+      instance.Borrowed.some((b) => !b.IsReturned)
+    ).length;
+
+    const remainingCopies = totalCopies - borrowedCount;
+
+    return c.json({
+      success: true,
+      data: {
+        BookId: book.BookId,
+        Title: book.Title,
+        Author: book.Author,
+        Description: book.Description,
+        CoverUrl: book.CoverUrl,
+        Category: book.BookCategory.map((bc) => bc.Category.Name).join(", "),
+        remainingCopies,
+      },
+    });
+  } catch (e) {
+    return c.json(
+      { success: false, msg: "Internal Server Error", data: `${e}` },
+      500
+    );
+  }
+};

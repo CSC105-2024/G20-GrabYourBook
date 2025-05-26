@@ -69,7 +69,10 @@ function Fantasy() {
           <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-6 gap-4 sm:gap-y-15">
             {currentBooks.map((book, i) => (
               <div key={i} className="flex flex-col items-center text-center">
-                <div onClick={() => handleClick(book)}>
+                <div
+                  onClick={() => handleClick(book)}
+                  className="cursor-pointer"
+                >
                   <div className="bg-white w-full aspect-[7/10] max-sm:max-w-[12rem] rounded-lg overflow-hidden flex items-center justify-center p-2">
                     <img
                       src={book.CoverUrl}
@@ -80,7 +83,7 @@ function Fantasy() {
                   <h3 className="text-sm text-left font-semibold mt-3 max-sm:max-w-[12rem] w-full truncate">
                     {truncateText(book.Title, isMobile ? 14 : 20)}
                   </h3>
-                  <p className="text-xs text-left text-gray-600 max-sm:max-w-[12rem]  w-full truncate">
+                  <p className="text-xs text-left text-gray-600 max-sm:max-w-[12rem] w-full truncate">
                     {truncateText(book.Author, isMobile ? 16 : 22)}
                   </p>
                 </div>

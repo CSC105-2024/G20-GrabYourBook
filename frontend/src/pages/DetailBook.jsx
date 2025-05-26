@@ -1,10 +1,41 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
-import pic from "../images/harry.jpg";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import { Axios } from "../utils/axiosInstance";
 
 function DetailBook() {
   const navigate = useNavigate();
+  const { id } = useParams();
+
+  const [book, setBook] = useState(null);
+  
+
+  useEffect(() => {
+    const fetchBook = async () => {
+      try {
+        const res = await Axios.get(`/book/${id}`);
+        if (res.data.success) {
+          setBook(res.data.data);
+        }
+      } catch (e) {
+        console.error("Book fetch error:", e);
+      }
+    };
+
+    
+    fetchBook();
+    
+  }, [id]);
+
+  if (!book) {
+    return (
+      <>
+        <div className="flex justify-center items-center h-screen">
+          <p className="text-xl text-gray-600">Loading book...</p>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -24,53 +55,59 @@ function DetailBook() {
             flex flex-col md:flex-row gap-18 justify-center items-center z-10"
         >
           <div className="Left Box flex flex-col items-center gap-3 w-[258px]">
-            <img src={pic} alt="book" className="w-full h-80 rounded-2xl" />
+            <img
+              src={book.CoverUrl}
+              alt="book"
+              className="w-full h-80 rounded-2xl"
+            />
 
             <div className="flex flex-row">
-              <p className="text-yellow-900 font-normal">Remaining 0 copies</p>
+              <p className="text-yellow-900 font-normal">
+                Remaining {book.remainingCopies} copies
+              </p>
             </div>
 
-            <div className="text-center text-[#E54545] text-2xl font-semibold leading-tight">
-              <p>Currently</p>
-              <p>unavailable</p>
+            <div
+              className={`text-center text-2xl font-semibold leading-tight ${
+                book.remainingCopies === 0 ? "text-[#E54545]" : "text-green-600"
+              }`}
+            >
+              <p>
+                {book.remainingCopies === 0
+                  ? "Currently unavailable"
+                  : "Available now"}
+              </p>
             </div>
+
             <button
-              onClick={() => navigate("/booking/1")}
-              className="bg-[#001F8B] hover:bg-blue-700 text-white px-10 py-2 rounded-xl font-semibold"
+              onClick={() => navigate(`/booking/${book.BookId}`)}
+              disabled={book.remainingCopies === 0}
+              className={`px-10 py-2 rounded-xl font-semibold ${
+                book.remainingCopies === 0
+                  ? "bg-gray-300 cursor-not-allowed text-white"
+                  : "bg-[#001F8B] hover:bg-blue-700 text-white"
+              }`}
             >
               Borrow a book
             </button>
-
-            <div className="flex flex-row ">
-              <p className="text-xs text-yellow-900 text-center mt-1">
-                Nearest available date : 29/02/2025
-              </p>
-            </div>
           </div>
 
           <div className="Right Box flex flex-col gap-6 text-black max-w-xl  ">
             <h1 className="text-2xl md:text-4xl font-bold text-[#061C6A]">
-              From The Films Of Harry Potter
+              {book.Title}
             </h1>
             <p>
               <span className="font-bold md:text-3xl">Author :</span>
-              <span className="font-semi md:text-xl"> JODY REVENSON</span>
+              <span className="font-semi md:text-xl"> {book.Author}</span>
             </p>
             <p>
               <span className="font-bold md:text-3xl">Category :</span>
-              <span className="font-semi md:text-xl"> Novel, Comedy</span>
+              <span className="font-semi md:text-xl"> {book.Category}</span>
             </p>
             <div>
               <p className="font-bold md:text-3xl ">Description :</p>
               <p className="text-sm  md:text-xl text-justify mt-1 leading-relaxed">
-                Harry Potter in 100 Objects presents a host of incredible props,
-                artefacts and set items from the legendary Harry Potter movies.
-                Through colourful photography and insider facts from the
-                creators of all eight films, readers will discover the
-                significance of each object and its unique role in shaping the
-                beloved series. Filled with cast and crew interviews,
-                behind-the-scenes accounts, concept art and film facts, this is
-                a must-have for all Harry Potter fans.
+                {book.Description}
               </p>
             </div>
           </div>

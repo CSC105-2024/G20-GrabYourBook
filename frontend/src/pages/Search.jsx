@@ -48,8 +48,9 @@ function SearchResult() {
   const currentBooks = pages[currentPage - 1] || [];
 
   const handleClick = (book) => {
-    navigate(`/detailbook?id=${book.BookId}`);
+    navigate(`/detailbook/${book.BookId}`);
   };
+
 
   return (
     <div className="relative min-h-screen w-full">

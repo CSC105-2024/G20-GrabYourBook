@@ -66,10 +66,14 @@ const router = createBrowserRouter([
   },
   {
     path: "/booking/:id",
-    element: <Booking/>,
+    element: <Booking />,
   },
   {
-    path: "/booking-success/:id",
+    path: "/borrow/booking-success/:id",
+    element: <BookingSuccessPage />,
+  },
+  {
+    path: "/borrow/booking-success",
     element: <BookingSuccessPage/>
   },
   {
@@ -81,21 +85,21 @@ const router = createBrowserRouter([
     element: <CancleSuccessPage />,
   },
   {
-    path: "/detailbook",
-    element: <DetailBook/>,
+    path: "/detailbook/:id",
+    element: <DetailBook />,
   },
   {
-    path: "/detailbookava",
-    element: <DetailBookAva/>,
+    path: "/detailbookava/:id",
+    element: <DetailBookAva />,
   },
   {
     path: "*",
-    element: <ErrorPage/>,
+    element: <ErrorPage />,
   },
   {
-    path: '/searchresult',
-    element: <SearchResult/>
-  }
+    path: "/searchresult",
+    element: <SearchResult />,
+  },
 ]);
 
 function RootWithContext() {

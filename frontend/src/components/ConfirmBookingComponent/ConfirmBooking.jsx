@@ -1,102 +1,117 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import harryImg from "../../images/harry.jpg";
 import confirmErrorIcon from "../../icons/bookingError.svg";
-import women from "../../images/womeninme.jpg";
+import { Axios } from "../../utils/axiosInstance";
 
-const books = [
-  {
-    id: "1",
-    title: "Harry Potter and the Order of the Phoenix",
-    image: harryImg,
-    description: "",
-  },
-  {
-    id: "2",
-    title: "THE WOMEN IN ME",
-    image: women,
-    description: "",
-  },
-];
 
-const addToMyBooks = (book, startDate, endDate) => {
-  const currentBooks = JSON.parse(localStorage.getItem("reservedBooks")) || [];
-  const newBook = {
-    bookingId: Date.now() + Math.random(),
-    id: book.id,
-    title: book.title,
-    cover: book.image,
-    reserveStart: startDate,
-    reserveEnd: endDate,
-  };
-  localStorage.setItem(
-    "reservedBooks",
-    JSON.stringify([...currentBooks, newBook])
-  );
-};
 
-const cutTitle = (title, maxLength = 20) => {
-  return title.length > maxLength ? title.slice(0, maxLength) + "..." : title;
-};
+
+
+const cutTitle = (title, maxLength = 20) =>
+title.length > maxLength ? title.slice(0, maxLength) + "..." : title;
+
+
 
 const ConfirmBooking = () => {
-  const { id } = useParams();
+  const { id } = useParams(); 
   const navigate = useNavigate();
+
   const [book, setBook] = useState(null);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const today = new Date().toISOString().split("T")[0];
   const [bookingError, setBookingError] = useState("");
+  const [shakeTrigger, setShakeTrigger] = useState(false);
+  const today = new Date().toISOString().split("T")[0];
+
+  
+  useEffect(() => {
+    const fetchBook = async () => {
+      try {
+        const res = await Axios.get(`/book/${id}`);
+        if (res.data.success) {
+          setBook(res.data.data);
+        }
+      } catch (e) {
+        console.error("Error loading book", e);
+      }
+    };
+    fetchBook();
+  }, [id]);
 
   useEffect(() => {
-    const foundBook = books.find((b) => b.id === id);
-    setBook(foundBook);
-
     if (bookingError) {
       const timer = setTimeout(() => {
         setBookingError("");
         setShakeTrigger(false);
       }, 3000);
-      return () => setTimeout(timer);
+      return () => clearTimeout(timer);
     }
-  }, [id, bookingError]);
+  }, [bookingError]);
+
+  const triggerShake = () => {
+    setShakeTrigger(false);
+    requestAnimationFrame(() => setShakeTrigger(true));
+  };
 
   const handleStartDateChange = (e) => {
     const selectedDate = new Date(e.target.value);
     setStartDate(e.target.value);
 
-    const calculatedEndDate = new Date(selectedDate);
-    calculatedEndDate.setDate(calculatedEndDate.getDate() + 5);
-    const formattedEndDate = calculatedEndDate.toISOString().split("T")[0];
-    setEndDate(formattedEndDate);
+    const calculatedEnd = new Date(selectedDate);
+    calculatedEnd.setDate(calculatedEnd.getDate() + 5);
+    const formattedEnd = calculatedEnd.toISOString().split("T")[0];
+    setEndDate(formattedEnd);
   };
 
-  const [shakeTrigger, setShakeTrigger] = useState(false);
-
-  const triggerShake = () => {
-    setShakeTrigger(false);
-    requestAnimationFrame(() => {
-      setShakeTrigger(true);
-    });
+  const isLoggedIn = () => {
+    return document.cookie.includes("authToken");
   };
 
-  const handleBooking = () => {
-    if (!startDate) {
-      setBookingError("Please select a start date before booking.");
+const handleBooking = async () => {
+  if (!isLoggedIn()) {
+    navigate("/login");
+    return;
+  }
+
+  if (!startDate) {
+    setBookingError("Please select a start date before booking.");
+    triggerShake();
+    return;
+  }
+
+  try {
+    const res = await Axios.post(
+      `/borrow/borrow`,
+      {
+        bookId: Number(id),
+        reserveDate: startDate,
+      },
+      { withCredentials: true }
+    );
+
+    if (res.data.success) {
+      navigate(`/borrow/booking-success/${id}`);
+    } else {
+      setBookingError(res.data.msg || "Booking failed.");
       triggerShake();
-      return;
     }
+  } catch (e) {
+    console.error("Booking Error:", e?.response?.data || e.message || e);
+    setBookingError("Booking failed.");
+    triggerShake();
+  }
+};
 
-    setBookingError("");
-    addToMyBooks(book, startDate, endDate);
-    navigate(`/booking-success/${id}`);
-  };
+
 
   if (!book) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <p className="text-xl text-gray-600">Loading book info...</p>
-      </div>
+      <>
+       
+        <div className="flex justify-center items-center min-h-screen">
+          <p className="text-xl text-gray-600">Loading book info...</p>
+        </div>
+      </>
     );
   }
 
@@ -130,12 +145,12 @@ const ConfirmBooking = () => {
           <div className="flex flex-col md:flex-row items-center gap-6 md:gap-10 w-full justify-center">
             <div className="flex flex-col items-center w-full md:w-auto">
               <img
-                src={book.image}
-                alt={book.title}
+                src={book.CoverUrl}
+                alt={book.Title}
                 className="w-40 h-60 rounded-lg shadow-md object-cover font-['Poppins']"
               />
               <p className="mt-4 text-blue-900 font-bold text-lg text-center font-['Poppins']">
-                {cutTitle(book.title)}
+                {cutTitle(book.Title)}
               </p>
             </div>
 

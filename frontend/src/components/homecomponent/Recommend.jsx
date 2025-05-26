@@ -7,7 +7,11 @@ function Recommend() {
   const navigate = useNavigate();
   const [books, setBooks] = useState([]);
   const handleClick = (book) => {
-    navigate(`/detailbooks/${book.BookId}`);
+    if (book.remainingCopies === 0) {
+      navigate(`/detailbook/${book.BookId}`);
+    } else {
+      navigate(`/detailbookava/${book.BookId}`);
+    }
   };
 
   useEffect(() => {
@@ -34,6 +38,9 @@ function Recommend() {
   const scrollRight = () => {
     scrollRef.current?.scrollBy({ left: scrollAmount, behavior: "smooth" });
   };
+
+  
+
 
   return (
     <div className="w-full flex justify-center items-center px-9">
@@ -71,8 +78,12 @@ function Recommend() {
                   <p className="text-xs sm:text-sm text-gray-600 truncate">
                     {book.Author}
                   </p>
-                  <button className="mt-2 max-w-40 text-xs sm:text-sm py-1 px-2 bg-[#418C86] text-white rounded">
-                    Available
+                  <button
+                    className={`mt-2 max-w-40 text-xs sm:text-sm py-1 px-2 rounded text-white ${
+                      book.remainingCopies === 0 ? "bg-red-500" : "bg-[#418C86]"
+                    }`}
+                  >
+                    {book.remainingCopies === 0 ? "Unavailable" : "Available"}
                   </button>
                 </div>
               </div>
