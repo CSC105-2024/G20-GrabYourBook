@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import harryImg from "../../images/harry.jpg";
 import confirmErrorIcon from "../../icons/bookingError.svg";
-import women from "../../images/womeninme.jpg";
 
 const books = [
   {
@@ -14,7 +13,7 @@ const books = [
   {
     id: "2",
     title: "THE WOMEN IN ME",
-    image: women,
+  
     description: "",
   },
 ];
@@ -113,12 +112,8 @@ const ConfirmBooking = () => {
               shakeTrigger ? "animate-shake" : "animate-fadeInScale"
             }`}
           >
-            <img
-              src={confirmErrorIcon}
-              alt="error icon"
-              className="w-5 h-5 md:w-10 md:h-10 mb-2 mt-1"
-            />
-            <span>{bookingError}</span>
+            
+            
           </div>
         )}
 
@@ -129,11 +124,7 @@ const ConfirmBooking = () => {
 
           <div className="flex flex-col md:flex-row items-center gap-6 md:gap-10 w-full justify-center">
             <div className="flex flex-col items-center w-full md:w-auto">
-              <img
-                src={book.image}
-                alt={book.title}
-                className="w-40 h-60 rounded-lg shadow-md object-cover font-['Poppins']"
-              />
+         
               <p className="mt-4 text-blue-900 font-bold text-lg text-center font-['Poppins']">
                 {cutTitle(book.title)}
               </p>

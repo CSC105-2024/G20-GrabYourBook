@@ -100,6 +100,7 @@ export const getBorrowedByUserId = async (userId: number) => {
     const borrowed = await db.borrowed.findMany({
       where: {
         UserId: userId,
+        IsReturned: false
       },
       include: {
         BookInstance: {
@@ -135,3 +136,14 @@ export const getBorrowedByUserId = async (userId: number) => {
       };
     });
   };
+
+export const returnBook = async (borrowedId: number) => {
+    const book = await db.borrowed.update({
+        where: {
+            BorrowedId: borrowedId
+        }, data : {
+            IsReturned: true,
+        }
+    })
+    return book;
+}
