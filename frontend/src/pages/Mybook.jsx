@@ -17,8 +17,8 @@ const Mybook = () => {
         } else {
           console.error(res.data.msg);
         }
-      } catch (error) {
-        console.error("Failed to fetch borrowed books:", error);
+      } catch (e) {
+        console.error("Failed to fetch borrowed books:", e);
         const saved = localStorage.getItem("reservedBooks");
         setReservedBooks(saved ? JSON.parse(saved) : []);
       }
@@ -57,7 +57,17 @@ const Mybook = () => {
             End Date: {new Date(book.DueDate).toLocaleDateString("en-GB")}
           </p>
         </div>
-        <div className="flex sm:justify-end">
+        <div className="flex sm:justify-end gap-2 flex-col sm:flex-row">
+          <button
+            onClick={() =>
+              navigate("/returnwarning", {
+                state: { BorrowedId: book.BorrowedId, books: reservedBooks },
+              })
+            }
+            className="bg-[#001F8B] hover:bg-[#0033cc] text-white text-sm sm:text-base font-semibold px-6 py-2 rounded-xl w-full md:w-[40%] transition"
+          >
+            Return
+          </button>
           <button
             onClick={() =>
               navigate("/canclewarning", {

@@ -1,6 +1,5 @@
 import React from "react";
 import Navbar from "../components/Navbar";
-import pic from "../images/womeninme.jpg";
 import { Navigate, useNavigate } from "react-router-dom";
 
 function DetailBook() {
@@ -24,7 +23,7 @@ function DetailBook() {
             flex flex-col md:flex-row gap-18 justify-center items-center z-10"
         >
           <div className="Left Box flex flex-col items-center gap-3 w-[258px]">
-            <img src={pic} alt="book" className="w-full h-80 rounded-2xl" />
+            
 
             <div className="flex flex-row">
               <p className="text-yellow-900 font-normal">Remaining 1 copies</p>
