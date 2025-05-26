@@ -1,7 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { CiSearch } from "react-icons/ci";
+import { useNavigate } from "react-router-dom";
 
 function SearchHome() {
+  const [query, setQuery] = useState("");
+  const navigate = useNavigate();
+
+  const handleSearch = () => {
+    if (query.trim()) {
+      navigate(`/searchresult?query=${encodeURIComponent(query)}`);
+    }
+  };
+
   return (
     <div className="w-full flex justify-center items-center px-4 mt-10">
       <div className="w-full max-w-320 bg-white rounded-lg shadow-lg flex flex-col items-center p-5 m-5">
@@ -12,8 +22,14 @@ function SearchHome() {
           <input
             className="w-2/3 sm:w-auto flex-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg p-3 shadow-sm"
             placeholder="Search for Book, Categories, Author"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSearch()}
           />
-          <button className="w-12 h-12 flex items-center justify-center text-2xl text-gray-400 bg-gray-50 rounded-lg border border-gray-300 hover:bg-gray-200 shadow-sm">
+          <button
+            onClick={handleSearch}
+            className="w-12 h-12 flex items-center justify-center text-2xl text-gray-400 bg-gray-50 rounded-lg border border-gray-300 hover:bg-gray-200 shadow-sm"
+          >
             <CiSearch />
           </button>
         </div>

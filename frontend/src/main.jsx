@@ -21,6 +21,7 @@ import Search from "./pages/Search.jsx";
 import DetailBook from "./pages/DetailBook.jsx";
 import DetailBookAva from "./pages/DetailBookAva.jsx"
 import ErrorPage from "./pages/Error.jsx";
+import SearchResult from "./pages/Search.jsx";
 
 const router = createBrowserRouter([
   {
@@ -80,10 +81,6 @@ const router = createBrowserRouter([
     element: <CancleSuccessPage />,
   },
   {
-    path: "/search",
-    element: <Search/>,
-  },
-  {
     path: "/detailbook",
     element: <DetailBook/>,
   },
@@ -94,6 +91,10 @@ const router = createBrowserRouter([
   {
     path: "*",
     element: <ErrorPage/>,
+  },
+  {
+    path: '/searchresult',
+    element: <SearchResult/>
   }
 ]);
 
