@@ -1,54 +1,34 @@
 import React, { useState, useEffect } from "react";
 import { SlArrowLeft, SlArrowRight } from "react-icons/sl";
 import Navbar from "../components/Navbar";
-import Harry from "../images/harry.jpg";
-import Lotr from "../images/lordofthering.jpg";
-import Elizabeth from "../images/elizabeth.jpg";
-import Gameofthrone from "../images/gameofthrone.jpg";
-import Hobbit from "../images/hobbit.jpg";
-import Percy from "../images/Percy.jpg";
-import Sherlock from "../images/sherlock.jpg";
-import Alchemist from "../images/alchemist.jpg";
-import Little from "../images/littlemermaid.jpg";
-import WomenInMe from "../images/womeninme.jpg";
 import { Navigate, useNavigate } from "react-router-dom";
+import { Axios } from "../utils/axiosInstance";
 
 function Comedy() {
-  const Navigate = useNavigate();
+  const navigate = useNavigate();
+  const [books, setBooks] = useState([]);
   const handleClick = (book) => {
-    if (book.title === "The Women In Me") {
-      Navigate("/detailbookava");
-    } else {
-      Navigate("/detailbook");
-    }
+    navigate(`/detailbook/${book.BookId}`);
   };
-  const books = [
-    {
-      title: "Harry Potter and the Chamber of Secrets",
-      author: "J.K Rowling's",
-      cover: Harry,
-    },
-    { title: "The Women In Me", author: "Britney Spears", cover: WomenInMe },
-    { title: "The Lord Of The Ring", author: "J.R.R Tolkien", cover: Lotr },
-    { title: "Elizabeth", author: "Gyles Brandreth", cover: Elizabeth },
-    { title: "The Little Mermaid", author: "Hans Christian", cover: Little },
-    {
-      title: "Game of Thrones",
-      author: "George R.R. Martin",
-      cover: Gameofthrone,
-    },
-    { title: "The Hobbit", author: "J.R.R Tolkien", cover: Hobbit },
-    { title: "Percy Jackson", author: "Rick Riordan", cover: Percy },
-    { title: "Sherlock Holmes", author: "Conan Doyle", cover: Sherlock },
-    { title: "The Alchemist", author: "Paulo Coelho", cover: Alchemist },
-    { title: "The Hobbit", author: "J.R.R Tolkien", cover: Hobbit },
-    { title: "Percy Jackson", author: "Rick Riordan", cover: Percy },
-    { title: "Sherlock Holmes", author: "Conan Doyle", cover: Sherlock },
-    { title: "The Alchemist", author: "Paulo Coelho", cover: Alchemist },
-  ];
 
   const [isMobile, setIsMobile] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const res = await Axios.get("/book/search", {
+          params: { name: "Comedy" },
+        });
+        if (res.data.success) {
+          setBooks(res.data.data);
+        }
+      } catch (e) {
+        console.error("comedy error", e);
+      }
+    };
+    fetchBooks();
+  }, []);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 640);
@@ -65,7 +45,8 @@ function Comedy() {
     { length: Math.ceil(books.length / booksPerPage) },
     (_, i) => books.slice(i * booksPerPage, i * booksPerPage + booksPerPage)
   );
-  const currentBooks = pages[currentPage - 1];
+
+  const currentBooks = pages[currentPage - 1] || [];
 
   return (
     <div className="relative min-h-screen  w-full">
@@ -92,16 +73,16 @@ function Comedy() {
                 <div onClick={() => handleClick(book)}>
                   <div className="bg-white w-full aspect-[7/10] max-sm:max-w-[12rem] rounded-lg overflow-hidden flex items-center justify-center p-2">
                     <img
-                      src={book.cover}
-                      alt={book.title}
+                      src={book.CoverUrl}
+                      alt={book.Title}
                       className="w-full h-full object-cover rounded"
                     />
                   </div>
                   <h3 className="text-sm text-left font-semibold mt-3 max-sm:max-w-[12rem] w-full truncate">
-                    {truncateText(book.title, isMobile ? 14 : 22)}
+                    {truncateText(book.Title, isMobile ? 14 : 20)}
                   </h3>
                   <p className="text-xs text-left text-gray-600 max-sm:max-w-[12rem]  w-full truncate">
-                    {truncateText(book.author, isMobile ? 16 : 28)}
+                    {truncateText(book.Author, isMobile ? 16 : 22)}
                   </p>
                 </div>
               </div>
