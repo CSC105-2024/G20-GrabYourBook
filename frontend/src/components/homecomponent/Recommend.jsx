@@ -7,7 +7,7 @@ function Recommend() {
   const navigate = useNavigate();
   const [books, setBooks] = useState([]);
   const handleClick = (book) => {
-    navigate(`/detailbooks/${book.BookId}`);
+    navigate(`/detailbook/${book.BookId}`);
   };
 
   useEffect(() => {
@@ -71,8 +71,12 @@ function Recommend() {
                   <p className="text-xs sm:text-sm text-gray-600 truncate">
                     {book.Author}
                   </p>
-                  <button className="mt-2 max-w-40 text-xs sm:text-sm py-1 px-2 bg-[#418C86] text-white rounded">
-                    Available
+                  <button
+                    className={`mt-2 max-w-40 text-xs sm:text-sm py-1 px-2 rounded text-white ${
+                      book.remainingCopies === 0 ? "bg-red-500" : "bg-[#418C86]"
+                    }`}
+                  >
+                    {book.remainingCopies === 0 ? "Unavailable" : "Available"}
                   </button>
                 </div>
               </div>

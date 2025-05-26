@@ -1,94 +1,97 @@
-import React, { useState, useEffect } from "react";
+
+import React, { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import harryImg from "../../images/harry.jpg";
+import LoginContext from "../../context/LoginContext";
 import confirmErrorIcon from "../../icons/bookingError.svg";
+import { Axios } from "../../utils/axiosInstance";
 
-const books = [
-  {
-    id: "1",
-    title: "Harry Potter and the Order of the Phoenix",
-    image: harryImg,
-    description: "",
-  },
-  {
-    id: "2",
-    title: "THE WOMEN IN ME",
-  
-    description: "",
-  },
-];
-
-const addToMyBooks = (book, startDate, endDate) => {
-  const currentBooks = JSON.parse(localStorage.getItem("reservedBooks")) || [];
-  const newBook = {
-    bookingId: Date.now() + Math.random(),
-    id: book.id,
-    title: book.title,
-    cover: book.image,
-    reserveStart: startDate,
-    reserveEnd: endDate,
-  };
-  localStorage.setItem(
-    "reservedBooks",
-    JSON.stringify([...currentBooks, newBook])
-  );
-};
-
-const cutTitle = (title, maxLength = 20) => {
-  return title.length > maxLength ? title.slice(0, maxLength) + "..." : title;
-};
+const cutTitle = (title, maxLength = 20) =>
+  title.length > maxLength ? title.slice(0, maxLength) + "..." : title;
 
 const ConfirmBooking = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { isLogin } = useContext(LoginContext);
+
   const [book, setBook] = useState(null);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const today = new Date().toISOString().split("T")[0];
   const [bookingError, setBookingError] = useState("");
+  const [shakeTrigger, setShakeTrigger] = useState(false);
+  const today = new Date().toISOString().split("T")[0];
 
   useEffect(() => {
-    const foundBook = books.find((b) => b.id === id);
-    setBook(foundBook);
+    if (!isLogin) {
+      navigate("/login");
+    }
+  }, [isLogin, navigate]);
 
+  useEffect(() => {
+    const fetchBook = async () => {
+      try {
+        const res = await Axios.get(`/book/${id}`);
+        if (res.data.success) {
+          setBook(res.data.data);
+        }
+      } catch (e) {
+        console.error("Error loading book", e);
+      }
+    };
+    fetchBook();
+  }, [id]);
+
+  useEffect(() => {
     if (bookingError) {
       const timer = setTimeout(() => {
         setBookingError("");
         setShakeTrigger(false);
       }, 3000);
-      return () => setTimeout(timer);
+      return () => clearTimeout(timer);
     }
-  }, [id, bookingError]);
+  }, [bookingError]);
+
+  const triggerShake = () => {
+    setShakeTrigger(false);
+    requestAnimationFrame(() => setShakeTrigger(true));
+  };
 
   const handleStartDateChange = (e) => {
     const selectedDate = new Date(e.target.value);
     setStartDate(e.target.value);
 
-    const calculatedEndDate = new Date(selectedDate);
-    calculatedEndDate.setDate(calculatedEndDate.getDate() + 5);
-    const formattedEndDate = calculatedEndDate.toISOString().split("T")[0];
-    setEndDate(formattedEndDate);
+    const calculatedEnd = new Date(selectedDate);
+    calculatedEnd.setDate(calculatedEnd.getDate() + 5);
+    setEndDate(calculatedEnd.toISOString().split("T")[0]);
   };
 
-  const [shakeTrigger, setShakeTrigger] = useState(false);
-
-  const triggerShake = () => {
-    setShakeTrigger(false);
-    requestAnimationFrame(() => {
-      setShakeTrigger(true);
-    });
-  };
-
-  const handleBooking = () => {
+  const handleBooking = async () => {
     if (!startDate) {
       setBookingError("Please select a start date before booking.");
       triggerShake();
       return;
     }
 
-    setBookingError("");
-    addToMyBooks(book, startDate, endDate);
-    navigate(`/booking-success/${id}`);
+    try {
+      const res = await Axios.post(
+        `/borrow/borrow`,
+        {
+          bookId: Number(id),
+          reserveDate: startDate,
+        },
+        { withCredentials: true }
+      );
+
+      if (res.data.success) {
+        navigate(`/borrow/booking-success/${id}`);
+      } else {
+        setBookingError(res.data.msg || "Booking failed.");
+        triggerShake();
+      }
+    } catch (e) {
+      console.error("Booking Error:", e?.response?.data || e.message || e);
+      setBookingError("Booking failed.");
+      triggerShake();
+    }
   };
 
   if (!book) {
@@ -105,15 +108,19 @@ const ConfirmBooking = () => {
       <div className="w-[1000px] h-[600px] left-[65%] top-[10%] absolute bg-blue-500 rounded-full blur-[250px]" />
       <div className="w-[1500px] h-[700px] right-[70%] top-[-30%] absolute bg-indigo-200 rounded-full blur-[150px]" />
 
-      <div className=" flex flex-col justify-center">
+      <div className="flex flex-col justify-center">
         {bookingError && (
           <div
-            className={`max-w-[800px] max-h-[60px] md:rounded-2xl md:shadow-xl p-3 flex flex-row text-xs md:flex-row  justify-center gap-1 md:gap-5 items-center md:w-[600px] mb-4 w-full bg-white text-black md:text-lg text-bold rounded-xl text-center font-semibold z-30 font-['Poppins'] ${
+            className={`max-w-[800px] max-h-[60px] md:rounded-2xl md:shadow-xl p-3 flex flex-row text-xs md:flex-row justify-center gap-1 md:gap-5 items-center md:w-[600px] mb-4 w-full bg-white text-black md:text-lg text-bold rounded-xl text-center font-semibold z-30 font-['Poppins'] ${
               shakeTrigger ? "animate-shake" : "animate-fadeInScale"
             }`}
           >
-            
-            
+            <img
+              src={confirmErrorIcon}
+              alt="error icon"
+              className="w-5 h-5 md:w-6 md:h-6"
+            />
+            {bookingError}
           </div>
         )}
 
@@ -124,9 +131,13 @@ const ConfirmBooking = () => {
 
           <div className="flex flex-col md:flex-row items-center gap-6 md:gap-10 w-full justify-center">
             <div className="flex flex-col items-center w-full md:w-auto">
-         
+              <img
+                src={book.CoverUrl}
+                alt={book.Title}
+                className="w-40 h-60 rounded-lg shadow-md object-cover font-['Poppins']"
+              />
               <p className="mt-4 text-blue-900 font-bold text-lg text-center font-['Poppins']">
-                {cutTitle(book.title)}
+                {cutTitle(book.Title)}
               </p>
             </div>
 

@@ -69,10 +69,15 @@ const router = createBrowserRouter([
   {
     path: "/booking/:id",
     element: <Booking />,
+    element: <Booking />,
   },
   {
-    path: "/booking-success/:id",
+    path: "/borrow/booking-success/:id",
     element: <BookingSuccessPage />,
+  },
+  {
+    path: "/borrow/booking-success",
+    element: <BookingSuccessPage/>
   },
   {
     path: "/canclewarning",
@@ -83,11 +88,11 @@ const router = createBrowserRouter([
     element: <CancleSuccessPage />,
   },
   {
-    path: "/detailbook",
+    path: "/detailbook/:id",
     element: <DetailBook />,
   },
   {
-    path: "/detailbookava",
+    path: "/detailbookava/:id",
     element: <DetailBookAva />,
   },
   {

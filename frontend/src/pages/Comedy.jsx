@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { SlArrowLeft, SlArrowRight } from "react-icons/sl";
 import Navbar from "../components/Navbar";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Axios } from "../utils/axiosInstance";
+
 
 function Comedy() {
   const navigate = useNavigate();
@@ -70,7 +71,10 @@ function Comedy() {
           <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-6 gap-4 sm:gap-y-15">
             {currentBooks.map((book, i) => (
               <div key={i} className="flex flex-col items-center text-center">
-                <div onClick={() => handleClick(book)}>
+                <div
+                  onClick={() => handleClick(book)}
+                  className="cursor-pointer"
+                >
                   <div className="bg-white w-full aspect-[7/10] max-sm:max-w-[12rem] rounded-lg overflow-hidden flex items-center justify-center p-2">
                     <img
                       src={book.CoverUrl}
