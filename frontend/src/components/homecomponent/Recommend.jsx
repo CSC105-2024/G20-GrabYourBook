@@ -1,45 +1,28 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { GoChevronRight, GoChevronLeft } from "react-icons/go";
-import Harry from "../../images/harry.jpg";
-import Lotr from "../../images/lordofthering.jpg";
-import Elizabeth from "../../images/elizabeth.jpg";
-import Gameofthrone from "../../images/gameofthrone.jpg";
-import Hobbit from "../../images/hobbit.jpg";
-import Percy from "../../images/Percy.jpg";
-import Sherlock from "../../images/sherlock.jpg";
-import Alchemist from "../../images/alchemist.jpg";
-import Little from "../../images/littlemermaid.jpg";
-import WomenInMe from "../../images/womeninme.jpg";
 import { Navigate, useNavigate } from "react-router-dom";
-
+import { Axios } from "../../utils/axiosInstance";
 
 function Recommend() {
-    const Navigate = useNavigate();
-    const handleClick = (book) => {
-      if (book.title === "The Women In...") {
-        Navigate("/detailbookava");
-      } else {
-        Navigate("/detailbook");
+  const navigate = useNavigate();
+  const [books, setBooks] = useState([]);
+  const handleClick = (book) => {
+    navigate(`/detailbooks/${book.BookId}`);
+  };
+
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const res = await Axios.get("/book/detailBook");
+        if (res.data.success) {
+          setBooks(res.data.data);
+        }
+      } catch (e) {
+        console.error("error fetching books", e);
       }
     };
-
-
-  const books = [
-    { title: "Harry Potter ...", author: "J.K Rowling's", cover: Harry },
-    { title: "The Women In...", author: "Britney Spears", cover: WomenInMe },
-    { title: "The Lord Of T...", author: "J.R.R Tolkien", cover: Lotr },
-    { title: "Elizabeth", author: "Gyles Brandreth", cover: Elizabeth },
-    { title: "The Little Mer ...", author: "Hans Christian", cover: Little },
-    {
-      title: "Game of Thrones",
-      author: "George R.R. Martin",
-      cover: Gameofthrone,
-    },
-    { title: "The Hobbit", author: "J.R.R Tolkien", cover: Hobbit },
-    { title: "Percy Jackson", author: "Rick Riordan", cover: Percy },
-    { title: "Sherlock Holmes", author: "Arthur Conan Doyle", cover: Sherlock },
-    { title: "The Alchemist", author: "Paulo Coelho", cover: Alchemist },
-  ];
+    fetchBooks();
+  }, []);
 
   const scrollRef = useRef(null);
   const scrollAmount = 250;
@@ -78,15 +61,15 @@ function Recommend() {
                 {" "}
                 <div onClick={() => handleClick(book)}>
                   <img
-                    src={book.cover}
+                    src={book.CoverUrl}
                     alt={book.title}
                     className="w-full h-[140px] sm:h-[270px] object-cover rounded-lg shadow"
                   />
                   <h3 className="text-sm sm:text-lg font-semibold mt-2 truncate">
-                    {book.title}
+                    {book.Title}
                   </h3>
                   <p className="text-xs sm:text-sm text-gray-600 truncate">
-                    {book.author}
+                    {book.Author}
                   </p>
                   <button className="mt-2 max-w-40 text-xs sm:text-sm py-1 px-2 bg-[#418C86] text-white rounded">
                     Available
