@@ -2,9 +2,8 @@ import type { Context } from "hono"
 import * as userModel from "../models/user.model.ts"
 
 type creatUserBody = {
-    username: string,
-    password: string
-
+    username: string;
+    password: string;
 }
 
 export const createUser = async (c: Context) => {

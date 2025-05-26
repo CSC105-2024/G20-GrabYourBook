@@ -11,7 +11,13 @@ const app = new Hono();
 
 export const db = new PrismaClient();
 
-app.use("*", cors({ origin: ["http://localhost:5173"] }));
+app.use(
+  '*',
+  cors({
+    origin: 'http://localhost:5173',
+    credentials: true,
+  })
+);
 
 db.$connect().catch((e) => {
   throw new Error(`Database Connection Error ${e}`);

@@ -38,7 +38,7 @@ const Register = () => {
     if (registerStatus === "success") {
       const timer = setTimeout(() => {
         navigate("/login");
-      }, 1200);
+      }, 2000);
       return () => clearTimeout(timer);
     }
 
@@ -55,19 +55,25 @@ const Register = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if(isSubmitting) return;
+    setIsSubmitting(true);
+
+    console.log("Submit Register with: ", formData);
 
     const isUsernameEmpty = !formData.username.trim();
     const isPasswordEmpty = !formData.password.trim();
     const isConfirmPasswordEmpty = !formData.confirmPassword.trim();
 
-    if (isUsernameEmpty && isPasswordEmpty && isConfirmPasswordEmpty) {
-      setRegisterStatus("empty");
-      setErrors({});
-      triggerShake();
-      return;
-    }
+    // if (isUsernameEmpty && isPasswordEmpty && isConfirmPasswordEmpty) {
+    //   setRegisterStatus("empty");
+    //   setErrors({});
+    //   triggerShake();
+    //   return;
+    // }
+
 
     const fieldErrors = {};
     if (isUsernameEmpty) fieldErrors.username = "Username is required";
@@ -80,34 +86,37 @@ const Register = () => {
       setErrors(fieldErrors);
       setRegisterStatus("error");
       triggerShake();
+      setIsSubmitting(false);
       return;
     }
 
     const result = registerSchema.safeParse(formData);
+  if (result.success) {
+    const res = await registerUser({
+      username: formData.username,
+      password: formData.password,
+    });
 
-    if (result.success) {
-      const res = await registerUser({
-        username: formData.username,
-        password: formData.password,
-      });
-      if (res.success) {
-        setRegisterStatus("success");
-        setErrors({});
-      } else {
-        setRegisterStatus("error");
-        setErrors({ username: res.msg });
-        triggerShake();
-      }
+    if (res.success) {
+      setRegisterStatus("success");
+      setErrors({});
     } else {
-      const newErrors = {};
-      result.error.errors.forEach((error) => {
-        newErrors[error.path[0]] = error.message;
-      });
-      setErrors(newErrors);
       setRegisterStatus("error");
+      setErrors({ username: res.msg });
       triggerShake();
     }
-  };
+  } else {
+    const newErrors = {};
+    result.error.errors.forEach((error) => {
+      newErrors[error.path[0]] = error.message;
+    });
+    setErrors(newErrors);
+    setRegisterStatus("error");
+    triggerShake();
+  }
+
+  setIsSubmitting(false);
+};
 
   return (
     <div className="w-full h-screen bg-neutral-200 overflow-hidden relative flex justify-center items-center">
@@ -214,10 +223,12 @@ const Register = () => {
 
             <button
               type="submit"
+              disabled={isSubmitting}
               className="w-full py-4 bg-blue-950 hover:bg-blue-800 text-white text-2xl rounded-2xl"
             >
               Register
             </button>
+            
           </form>
 
           <div className="mt-4 text-center">

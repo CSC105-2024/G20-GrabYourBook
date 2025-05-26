@@ -29,6 +29,7 @@ model Books {
   Author       String
   Description  String
   Created_At   DateTime        @default(now())
+  CoverUrl     String          @default("")
   BookCategory BookCategory[]
   BookInstance BookInstances[]
 }
@@ -38,8 +39,8 @@ model BookCategory {
   BookId         Int
   CategoryId     Int
   Created_At     DateTime   @default(now())
-  Category       Categories @relation(fields: [CategoryId], references: [CatagoryId])
   Book           Books      @relation(fields: [BookId], references: [BookId])
+  Category       Categories @relation(fields: [CategoryId], references: [CatagoryId])
 }
 
 model BookInstances {
