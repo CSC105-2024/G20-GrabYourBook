@@ -1,20 +1,17 @@
-import React, { useState, useEffect } from "react";
+
+import React, { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import LoginContext from "../../context/LoginContext";
 import confirmErrorIcon from "../../icons/bookingError.svg";
 import { Axios } from "../../utils/axiosInstance";
 
-
-
-
-
 const cutTitle = (title, maxLength = 20) =>
-title.length > maxLength ? title.slice(0, maxLength) + "..." : title;
-
-
+  title.length > maxLength ? title.slice(0, maxLength) + "..." : title;
 
 const ConfirmBooking = () => {
-  const { id } = useParams(); 
+  const { id } = useParams();
   const navigate = useNavigate();
+  const { isLogin } = useContext(LoginContext);
 
   const [book, setBook] = useState(null);
   const [startDate, setStartDate] = useState("");
@@ -23,7 +20,12 @@ const ConfirmBooking = () => {
   const [shakeTrigger, setShakeTrigger] = useState(false);
   const today = new Date().toISOString().split("T")[0];
 
-  
+  useEffect(() => {
+    if (!isLogin) {
+      navigate("/login");
+    }
+  }, [isLogin, navigate]);
+
   useEffect(() => {
     const fetchBook = async () => {
       try {
@@ -59,59 +61,44 @@ const ConfirmBooking = () => {
 
     const calculatedEnd = new Date(selectedDate);
     calculatedEnd.setDate(calculatedEnd.getDate() + 5);
-    const formattedEnd = calculatedEnd.toISOString().split("T")[0];
-    setEndDate(formattedEnd);
+    setEndDate(calculatedEnd.toISOString().split("T")[0]);
   };
 
-  const isLoggedIn = () => {
-    return document.cookie.includes("authToken");
-  };
+  const handleBooking = async () => {
+    if (!startDate) {
+      setBookingError("Please select a start date before booking.");
+      triggerShake();
+      return;
+    }
 
-const handleBooking = async () => {
-  if (!isLoggedIn()) {
-    navigate("/login");
-    return;
-  }
+    try {
+      const res = await Axios.post(
+        `/borrow/borrow`,
+        {
+          bookId: Number(id),
+          reserveDate: startDate,
+        },
+        { withCredentials: true }
+      );
 
-  if (!startDate) {
-    setBookingError("Please select a start date before booking.");
-    triggerShake();
-    return;
-  }
-
-  try {
-    const res = await Axios.post(
-      `/borrow/borrow`,
-      {
-        bookId: Number(id),
-        reserveDate: startDate,
-      },
-      { withCredentials: true }
-    );
-
-    if (res.data.success) {
-      navigate(`/borrow/booking-success/${id}`);
-    } else {
-      setBookingError(res.data.msg || "Booking failed.");
+      if (res.data.success) {
+        navigate(`/borrow/booking-success/${id}`);
+      } else {
+        setBookingError(res.data.msg || "Booking failed.");
+        triggerShake();
+      }
+    } catch (e) {
+      console.error("Booking Error:", e?.response?.data || e.message || e);
+      setBookingError("Booking failed.");
       triggerShake();
     }
-  } catch (e) {
-    console.error("Booking Error:", e?.response?.data || e.message || e);
-    setBookingError("Booking failed.");
-    triggerShake();
-  }
-};
-
-
+  };
 
   if (!book) {
     return (
-      <>
-       
-        <div className="flex justify-center items-center min-h-screen">
-          <p className="text-xl text-gray-600">Loading book info...</p>
-        </div>
-      </>
+      <div className="flex justify-center items-center min-h-screen">
+        <p className="text-xl text-gray-600">Loading book info...</p>
+      </div>
     );
   }
 
@@ -121,15 +108,19 @@ const handleBooking = async () => {
       <div className="w-[1000px] h-[600px] left-[65%] top-[10%] absolute bg-blue-500 rounded-full blur-[250px]" />
       <div className="w-[1500px] h-[700px] right-[70%] top-[-30%] absolute bg-indigo-200 rounded-full blur-[150px]" />
 
-      <div className=" flex flex-col justify-center">
+      <div className="flex flex-col justify-center">
         {bookingError && (
           <div
-            className={`max-w-[800px] max-h-[60px] md:rounded-2xl md:shadow-xl p-3 flex flex-row text-xs md:flex-row  justify-center gap-1 md:gap-5 items-center md:w-[600px] mb-4 w-full bg-white text-black md:text-lg text-bold rounded-xl text-center font-semibold z-30 font-['Poppins'] ${
+            className={`max-w-[800px] max-h-[60px] md:rounded-2xl md:shadow-xl p-3 flex flex-row text-xs md:flex-row justify-center gap-1 md:gap-5 items-center md:w-[600px] mb-4 w-full bg-white text-black md:text-lg text-bold rounded-xl text-center font-semibold z-30 font-['Poppins'] ${
               shakeTrigger ? "animate-shake" : "animate-fadeInScale"
             }`}
           >
-            
-            
+            <img
+              src={confirmErrorIcon}
+              alt="error icon"
+              className="w-5 h-5 md:w-6 md:h-6"
+            />
+            {bookingError}
           </div>
         )}
 

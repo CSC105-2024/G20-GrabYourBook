@@ -6,9 +6,9 @@ import { Axios } from "../utils/axiosInstance";
 function DetailBook() {
   const navigate = useNavigate();
   const { id } = useParams();
+  const [nextAvailable, setNextAvailable] = useState(null);
 
   const [book, setBook] = useState(null);
-  
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -16,15 +16,22 @@ function DetailBook() {
         const res = await Axios.get(`/book/${id}`);
         if (res.data.success) {
           setBook(res.data.data);
+
+          if (res.data.data.remainingCopies === 0) {
+            const nextDateRes = await Axios.get(
+              `/book/availableDate?bookId=${res.data.data.BookId}`
+            );
+            if (nextDateRes.data.success) {
+              setNextAvailable(nextDateRes.data.nextAvailableDate);
+            }
+          }
         }
       } catch (e) {
         console.error("Book fetch error:", e);
       }
     };
 
-    
     fetchBook();
-    
   }, [id]);
 
   if (!book) {
@@ -50,8 +57,8 @@ function DetailBook() {
         </div>
 
         <div
-          className=" All Content w-full max-w-[1000px] md:rounded-[20px] px-6 md:px-16 py-8 md:py-16 
-            md:bg-white bg-transparent md:shadow-lg shadow-none 
+          className=" All Content w-full max-w-[1000px] md:rounded-[20px] px-6 md:px-16 py-8 md:py-16
+            md:bg-white bg-transparent md:shadow-lg shadow-none
             flex flex-col md:flex-row gap-18 justify-center items-center z-10"
         >
           <div className="Left Box flex flex-col items-center gap-3 w-[258px]">
@@ -60,13 +67,11 @@ function DetailBook() {
               alt="book"
               className="w-full h-80 rounded-2xl"
             />
-
             <div className="flex flex-row">
               <p className="text-yellow-900 font-normal">
                 Remaining {book.remainingCopies} copies
               </p>
             </div>
-
             <div
               className={`text-center text-2xl font-semibold leading-tight ${
                 book.remainingCopies === 0 ? "text-[#E54545]" : "text-green-600"
@@ -78,17 +83,23 @@ function DetailBook() {
                   : "Available now"}
               </p>
             </div>
-
+            {nextAvailable && (
+              <div className="text-yellow-900 font-normal justify-center items-center flex flex-col">
+                <div>Nearest available date:</div>
+                <div>{nextAvailable}</div>
+              </div>
+            )}
             <button
               onClick={() => navigate(`/booking/${book.BookId}`)}
               disabled={book.remainingCopies === 0}
-              className={`px-10 py-2 rounded-xl font-semibold ${
-                book.remainingCopies === 0
-                  ? "bg-gray-300 cursor-not-allowed text-white"
-                  : "bg-[#001F8B] hover:bg-blue-700 text-white"
-              }`}
+              className={`px-10 py-2 rounded-xl font-semibold text-white mt-4 
+             ${
+               book.remainingCopies === 0
+                 ? "bg-gray-400 cursor-not-allowed"
+                 : "bg-[#001F8B] hover:bg-blue-700"
+             }`}
             >
-              Borrow a book
+              Reserve this book
             </button>
           </div>
 

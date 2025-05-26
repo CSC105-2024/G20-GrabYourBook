@@ -7,11 +7,7 @@ function Recommend() {
   const navigate = useNavigate();
   const [books, setBooks] = useState([]);
   const handleClick = (book) => {
-    if (book.remainingCopies === 0) {
-      navigate(`/detailbook/${book.BookId}`);
-    } else {
-      navigate(`/detailbookava/${book.BookId}`);
-    }
+    navigate(`/detailbook/${book.BookId}`);
   };
 
   useEffect(() => {
@@ -38,9 +34,6 @@ function Recommend() {
   const scrollRight = () => {
     scrollRef.current?.scrollBy({ left: scrollAmount, behavior: "smooth" });
   };
-
-  
-
 
   return (
     <div className="w-full flex justify-center items-center px-9">
